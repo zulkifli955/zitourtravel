@@ -7,7 +7,6 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { useAuth } from "@/hooks/use-auth";
 import { BRAND } from "@/lib/site";
 import { Compass, Menu } from "lucide-react";
 import { useState } from "react";
@@ -16,13 +15,12 @@ import { Link } from "react-router";
 /** Landing-page anchors, prefixed with "/" so they work from any page. */
 const NAV_LINKS = [
   { label: "Tours", href: "/#tours" },
-  { label: "Featured", href: "/#featured" },
+  { label: "Gallery", href: "/#gallery" },
   { label: "Why Zi Tour", href: "/#why" },
   { label: "Reviews", href: "/#reviews" },
 ];
 
 export function SiteNav() {
-  const { isAuthenticated } = useAuth();
   const [open, setOpen] = useState(false);
 
   return (
@@ -53,15 +51,6 @@ export function SiteNav() {
         </nav>
 
         <div className="hidden items-center gap-3 md:flex">
-          {isAuthenticated ? (
-            <Button asChild variant="ghost" size="sm">
-              <Link to="/dashboard">My dashboard</Link>
-            </Button>
-          ) : (
-            <Button asChild variant="ghost" size="sm">
-              <Link to="/auth">Sign in</Link>
-            </Button>
-          )}
           <Button asChild size="sm" className="rounded-full px-4">
             <a href="/#tours">Browse tours</a>
           </Button>
@@ -94,20 +83,7 @@ export function SiteNav() {
                   {link.label}
                 </a>
               ))}
-              <div className="mt-4 flex flex-col gap-2 border-t pt-4">
-                {isAuthenticated ? (
-                  <Button asChild onClick={() => setOpen(false)}>
-                    <Link to="/dashboard">My dashboard</Link>
-                  </Button>
-                ) : (
-                  <Button
-                    asChild
-                    variant="outline"
-                    onClick={() => setOpen(false)}
-                  >
-                    <Link to="/auth">Sign in</Link>
-                  </Button>
-                )}
+              <div className="mt-4 border-t pt-4">
                 <Button asChild onClick={() => setOpen(false)}>
                   <a href="/#tours">Browse tours</a>
                 </Button>

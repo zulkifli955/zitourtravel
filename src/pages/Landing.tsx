@@ -7,20 +7,22 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteNav } from "@/components/SiteNav";
 import { TourCard } from "@/components/tours/TourCard";
-import { cn, formatIDR } from "@/lib/utils";
-import { waLink } from "@/lib/site";
+import { WhatsAppButton } from "@/components/WhatsAppButton";
+import { cn } from "@/lib/utils";
+import { CONTACT, MAPS_EMBED_URL, MAPS_LINK, waLink } from "@/lib/site";
 import { useMutation, useQuery } from "convex/react";
 import { motion } from "framer-motion";
 import {
   ArrowRight,
   BadgePercent,
   CarFront,
+  Clock,
   Compass,
   Headset,
   MapPin,
   MessageCircle,
+  Phone,
   Search,
-  Ship,
   Star,
   X,
 } from "lucide-react";
@@ -31,8 +33,8 @@ import { useLocation } from "react-router";
 /* Data                                                                */
 /* ------------------------------------------------------------------ */
 
-const HERO_IMAGE =
-  "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1800&auto=format&fit=crop";
+const BRIDGE_IMAGE =
+  "https://images.unsplash.com/photo-1502920917128-1aa500764cbd?q=80&w=2400&auto=format&fit=crop";
 
 const STATS = [
   { value: "12+", label: "Years guiding Batam" },
@@ -190,129 +192,92 @@ function Stars({ className }: { className?: string }) {
 
 function Hero() {
   return (
-    <section id="top" className="relative overflow-hidden pt-16">
-      {/* Dotted technical texture, faint under everything */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle,color-mix(in_oklab,var(--foreground)_9%,transparent)_1px,transparent_1px)] bg-[size:26px_26px] opacity-60 [mask-image:linear-gradient(to_bottom,black,transparent)]"
-      />
-      <div className="pointer-events-none absolute -top-24 right-[-8%] size-[26rem] rounded-full bg-primary/10 blur-3xl" />
-      <div className="pointer-events-none absolute left-[-10%] top-48 size-96 rounded-full bg-accent/60 blur-3xl" />
+    <section id="top" className="pt-16">
+      <div className="relative overflow-hidden">
+        <img
+          src={BRIDGE_IMAGE}
+          alt="Barelang Bridge stretching across the sea in Batam"
+          className="absolute inset-0 size-full object-cover"
+        />
+        <div className="absolute inset-0 bg-linear-to-b from-black/75 via-black/45 to-black/70" />
 
-      <div className="relative mx-auto grid w-full max-w-6xl items-center gap-14 px-4 pb-16 pt-14 sm:px-6 lg:grid-cols-2 lg:gap-16 lg:pb-20 lg:pt-20">
-        <div>
-          <Reveal>
-            <Badge
-              variant="secondary"
-              className="gap-1.5 rounded-full px-3 py-1 text-xs font-medium"
-            >
-              <MapPin className="size-3.5 text-primary" />
-              Batam, Indonesia · 45 min from Singapore
-            </Badge>
-          </Reveal>
-          <Reveal delay={0.05}>
-            <h1 className="mt-6 text-balance text-4xl font-bold tracking-tight sm:text-5xl lg:text-[3.4rem] lg:leading-[1.06]">
-              Batam&apos;s best day tours,{" "}
-              <span className="text-primary">without the planning.</span>
-            </h1>
-          </Reveal>
-          <Reveal delay={0.1}>
-            <p className="mt-5 max-w-xl text-pretty text-base leading-7 text-muted-foreground sm:text-lg sm:leading-8">
-              A catalog of private, guided day trips — Barelang&apos;s bridges,
-              Nongsa&apos;s beaches, Marina&apos;s night market. Browse, pick
-              one, and message us on WhatsApp.
-            </p>
-          </Reveal>
-          <Reveal delay={0.15}>
-            <div className="mt-8 flex flex-wrap items-center gap-3">
-              <Button asChild size="lg" className="h-12 rounded-full px-6 text-sm">
-                <a href="#tours">
-                  Browse tours <ArrowRight />
-                </a>
-              </Button>
-              <Button
-                asChild
-                variant="outline"
-                size="lg"
-                className="h-12 rounded-full px-6 text-sm"
-              >
-                <a href={waLink()} target="_blank" rel="noopener noreferrer">
-                  <MessageCircle className="text-primary" /> Chat on WhatsApp
-                </a>
-              </Button>
-            </div>
-          </Reveal>
-          <Reveal delay={0.2}>
-            <div className="mt-9 flex items-center gap-4">
-              <div className="flex -space-x-2.5">
-                {["SL", "BS", "MC", "AR"].map((initials, i) => (
-                  <span
-                    key={initials}
-                    className={cn(
-                      "flex size-9 items-center justify-center rounded-full border-2 border-background text-[11px] font-semibold",
-                      AVATAR_TINTS[i % AVATAR_TINTS.length],
-                    )}
-                  >
-                    {initials}
-                  </span>
-                ))}
-              </div>
-              <div className="text-sm">
-                <Stars />
-                <p className="mt-0.5 text-muted-foreground">
-                  <span className="font-semibold text-foreground">4.9/5</span>{" "}
-                  from 2,300+ travelers
-                </p>
-              </div>
-            </div>
-          </Reveal>
-        </div>
-
-        <Reveal delay={0.1}>
-          <div className="relative">
-            <div className="aspect-[4/3] overflow-hidden rounded-3xl border border-border/60 bg-muted shadow-lg">
-              <img
-                src={HERO_IMAGE}
-                alt="Tropical beach on Batam island"
-                className="size-full object-cover"
-              />
-            </div>
-
-            <motion.div
-              animate={{ y: [0, -8, 0] }}
-              transition={{ repeat: Infinity, duration: 6, ease: "easeInOut" }}
-              className="absolute -bottom-7 -left-3 w-60 rounded-2xl border border-border/70 bg-card/95 p-4 shadow-md backdrop-blur sm:-left-8 sm:w-64"
-            >
-              <p className="font-mono text-[10px] font-medium uppercase tracking-[0.14em] text-muted-foreground">
-                Most booked this week
+        <div className="relative mx-auto flex min-h-[560px] w-full max-w-6xl flex-col justify-center px-4 pb-20 pt-12 sm:px-6 lg:min-h-[600px]">
+          <div className="max-w-2xl">
+            <Reveal>
+              <Badge className="gap-1.5 rounded-full border border-white/25 bg-white/10 px-3 py-1 text-xs font-medium text-white backdrop-blur-sm">
+                <MapPin className="size-3.5 text-teal-300" />
+                Batam, Indonesia · 45 min from Singapore
+              </Badge>
+            </Reveal>
+            <Reveal delay={0.05}>
+              <h1 className="mt-6 text-balance text-4xl font-bold tracking-tight text-white sm:text-5xl lg:text-[3.4rem] lg:leading-[1.06]">
+                Batam&apos;s best day tours,{" "}
+                <span className="text-teal-300">without the planning.</span>
+              </h1>
+            </Reveal>
+            <Reveal delay={0.1}>
+              <p className="mt-5 max-w-xl text-pretty text-base leading-7 text-white/85 sm:text-lg sm:leading-8">
+                From Barelang&apos;s bridges to Nongsa&apos;s beaches — a
+                catalog of private, guided day trips. Browse, pick one, and
+                message us on WhatsApp.
               </p>
-              <p className="mt-1.5 text-sm font-semibold leading-snug tracking-tight">
-                Barelang Bridge &amp; Coastal Drive
-              </p>
-              <div className="mt-2 flex items-center justify-between">
-                <span className="inline-flex items-center gap-1 text-xs">
-                  <Star className="size-3.5 fill-amber-400 text-amber-400" />
-                  <span className="font-semibold">4.8</span>
-                  <span className="text-muted-foreground">(428)</span>
-                </span>
-                <span className="text-sm font-bold tracking-tight">
-                  {formatIDR(300000)}
-                </span>
+            </Reveal>
+            <Reveal delay={0.15}>
+              <div className="mt-8 flex flex-wrap items-center gap-3">
+                <Button
+                  asChild
+                  size="lg"
+                  className="h-12 rounded-full bg-white px-6 text-sm text-foreground shadow-sm hover:bg-white/90 hover:text-foreground"
+                >
+                  <a href="#tours">
+                    Browse tours <ArrowRight />
+                  </a>
+                </Button>
+                <Button
+                  asChild
+                  variant="outline"
+                  size="lg"
+                  className="h-12 rounded-full border-white/40 bg-transparent px-6 text-sm text-white hover:bg-white/10 hover:text-white"
+                >
+                  <a href={waLink()} target="_blank" rel="noopener noreferrer">
+                    <MessageCircle className="text-teal-300" /> Chat on
+                    WhatsApp
+                  </a>
+                </Button>
               </div>
-            </motion.div>
-
-            <div className="absolute -top-4 right-4 flex items-center gap-2 rounded-full border border-border/70 bg-card/95 px-3.5 py-2 font-mono text-[11px] font-medium shadow-sm backdrop-blur">
-              <Ship className="size-4 text-primary" />
-              island &amp; beach
-            </div>
+            </Reveal>
+            <Reveal delay={0.2}>
+              <div className="mt-9 flex items-center gap-4">
+                <div className="flex -space-x-2.5">
+                  {["SL", "BS", "MC", "AR"].map((initials, i) => (
+                    <span
+                      key={initials}
+                      className={cn(
+                        "flex size-9 items-center justify-center rounded-full border-2 border-white/30 text-[11px] font-semibold",
+                        AVATAR_TINTS[i % AVATAR_TINTS.length],
+                      )}
+                    >
+                      {initials}
+                    </span>
+                  ))}
+                </div>
+                <div className="text-sm">
+                  <Stars />
+                  <p className="mt-0.5 text-white/85">
+                    <span className="font-semibold text-white">4.9/5</span>{" "}
+                    from 2,300+ travelers
+                  </p>
+                </div>
+              </div>
+            </Reveal>
           </div>
-        </Reveal>
+        </div>
       </div>
 
       {/* Stats strip */}
-      <div className="relative mx-auto w-full max-w-6xl px-4 sm:px-6">
+      <div className="mx-auto w-full max-w-6xl px-4 sm:px-6">
         <Reveal delay={0.1}>
-          <div className="grid grid-cols-2 gap-px overflow-hidden rounded-2xl border bg-border md:grid-cols-4">
+          <div className="-mt-10 grid grid-cols-2 gap-px overflow-hidden rounded-2xl border bg-border shadow-sm md:grid-cols-4">
             {STATS.map((stat) => (
               <div
                 key={stat.label}
@@ -358,17 +323,17 @@ function TourGridSkeleton() {
   );
 }
 
-function FeaturedTours({ tours }: { tours?: Doc<"tours">[] }) {
+function Gallery({ tours }: { tours?: Doc<"tours">[] }) {
   const featured = (tours ?? []).filter((tour) => tour.featured).slice(0, 3);
 
   return (
-    <section id="featured" className="scroll-mt-24 py-20 lg:py-24">
+    <section id="gallery" className="scroll-mt-24 py-20 lg:py-24">
       <div className="mx-auto w-full max-w-6xl px-4 sm:px-6">
         <Reveal>
           <div className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
             <SectionHeader
-              eyebrow="featured"
-              title="Tours travelers keep rebooking"
+              eyebrow="gallery"
+              title="Gallery"
               copy="The three most-booked experiences in the catalog right now."
             />
             <Button asChild variant="outline" className="w-fit rounded-full">
@@ -424,7 +389,7 @@ function BrowseTours({ tours }: { tours?: Doc<"tours">[] }) {
   };
 
   return (
-    <section id="tours" className="scroll-mt-24 bg-card/60 py-20 lg:py-24">
+    <section id="tours" className="scroll-mt-24 bg-muted/50 py-20 lg:py-24">
       <div className="mx-auto w-full max-w-6xl px-4 sm:px-6">
         <Reveal>
           <SectionHeader
@@ -558,7 +523,7 @@ function BrowseTours({ tours }: { tours?: Doc<"tours">[] }) {
 }
 
 /* ------------------------------------------------------------------ */
-/* Why / How / Reviews                                                 */
+/* Why / How / Reviews / Location                                      */
 /* ------------------------------------------------------------------ */
 
 function WhyZiTour() {
@@ -599,7 +564,7 @@ function WhyZiTour() {
 
 function HowItWorks() {
   return (
-    <section id="how" className="scroll-mt-24 bg-card/60 py-20 lg:py-24">
+    <section id="how" className="scroll-mt-24 bg-muted/50 py-20 lg:py-24">
       <div className="mx-auto w-full max-w-6xl px-4 sm:px-6">
         <Reveal>
           <SectionHeader
@@ -672,6 +637,69 @@ function Reviews() {
             </Reveal>
           ))}
         </div>
+      </div>
+    </section>
+  );
+}
+
+function Location() {
+  return (
+    <section id="location" className="scroll-mt-24 bg-muted/50 py-20 lg:py-24">
+      <div className="mx-auto w-full max-w-6xl px-4 sm:px-6">
+        <Reveal>
+          <SectionHeader
+            eyebrow="location"
+            title="Find us in Tanjung Piayu"
+            copy="Drop by our base in Batam before or after your tour — or just message us."
+          />
+        </Reveal>
+        <Reveal delay={0.05}>
+          <div className="mt-10 grid gap-6 lg:grid-cols-[1.4fr_1fr]">
+            <div className="relative min-h-[320px] overflow-hidden rounded-2xl border bg-muted shadow-sm lg:min-h-[420px]">
+              <iframe
+                src={MAPS_EMBED_URL}
+                title="Map showing the Zi Tour Travel office at Buana Garden, Block Orchid No. 082, Tanjung Piayu, Batam"
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                className="absolute inset-0 size-full border-0"
+              />
+            </div>
+            <div className="flex flex-col justify-center gap-6 rounded-2xl border bg-card p-7 shadow-sm">
+              <div>
+                <span className="flex size-11 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                  <MapPin className="size-5" />
+                </span>
+                <h3 className="mt-4 text-lg font-semibold tracking-tight">
+                  Zi Tour Travel · Base
+                </h3>
+                <p className="mt-2 text-sm leading-6 text-muted-foreground">
+                  Buana Garden, Block Orchid No. 082
+                  <br />
+                  Tanjung Piayu, Batam, Kepulauan Riau
+                </p>
+              </div>
+              <ul className="space-y-3 text-sm text-muted-foreground">
+                <li className="flex items-center gap-2.5">
+                  <Phone className="size-4 shrink-0 text-primary" />
+                  {CONTACT.phone}
+                </li>
+                <li className="flex items-center gap-2.5">
+                  <Clock className="size-4 shrink-0 text-primary" />
+                  {CONTACT.hours}
+                </li>
+              </ul>
+              <Button asChild variant="outline" className="w-fit rounded-full">
+                <a
+                  href={MAPS_LINK}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Open in Google Maps <ArrowRight />
+                </a>
+              </Button>
+            </div>
+          </div>
+        </Reveal>
       </div>
     </section>
   );
@@ -756,14 +784,16 @@ export default function Landing() {
       <SiteNav />
       <main>
         <Hero />
-        <FeaturedTours tours={tours} />
+        <Gallery tours={tours} />
         <BrowseTours tours={tours} />
         <WhyZiTour />
         <HowItWorks />
         <Reviews />
+        <Location />
         <CtaBand />
       </main>
       <SiteFooter />
+      <WhatsAppButton />
     </div>
   );
 }

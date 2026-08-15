@@ -5,6 +5,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteNav } from "@/components/SiteNav";
 import { TourCard } from "@/components/tours/TourCard";
+import { WhatsAppButton } from "@/components/WhatsAppButton";
 import { formatIDR } from "@/lib/utils";
 import { waLink } from "@/lib/site";
 import { useQuery } from "convex/react";
@@ -277,6 +278,7 @@ export default function TourDetail() {
         )}
       </main>
       <SiteFooter />
+      <WhatsAppButton />
     </div>
   );
 }

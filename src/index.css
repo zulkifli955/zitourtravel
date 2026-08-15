@@ -49,7 +49,7 @@
 /* CHANGE VALUES FOR THEME */
 :root {
   --radius: 0.75rem;
-  --background: oklch(0.986 0.003 222);
+  --background: oklch(1 0 0);
   --foreground: oklch(0.21 0.02 240);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.21 0.02 240);

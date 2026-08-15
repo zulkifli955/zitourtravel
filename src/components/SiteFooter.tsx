@@ -45,10 +45,10 @@ export function SiteFooter() {
               </li>
               <li>
                 <a
-                  href="/#featured"
+                  href="/#gallery"
                   className="transition-colors hover:text-foreground"
                 >
-                  Featured tours
+                  Gallery
                 </a>
               </li>
               <li>
