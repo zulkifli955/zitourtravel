@@ -19,12 +19,14 @@ export function PhotoCarousel({
   alt = "Photo",
   className,
   itemClassName,
+  imgClassName,
   overlay,
 }: {
   photos: string[];
   alt?: string;
   className?: string;
   itemClassName?: string;
+  imgClassName?: string;
   overlay?: React.ReactNode;
 }) {
   const [api, setApi] = useState<CarouselApi>();
@@ -62,7 +64,7 @@ export function PhotoCarousel({
                 <img
                   src={src}
                   alt={`${alt} photo ${index + 1}`}
-                  className="size-full object-cover"
+                  className={cn("size-full object-cover", imgClassName)}
                 />
               </div>
             </CarouselItem>

@@ -34,6 +34,19 @@ const BRIDGE_IMAGE = "/assets/hero.webp";
 
 const DRIVER_IMAGE = "/assets/10.webp";
 
+/** Gallery photos uploaded by the owner (2–10; 11 not uploaded yet). */
+const GALLERY_PHOTOS = [
+  "/assets/2.jpeg",
+  "/assets/3.jpeg",
+  "/assets/4.jpeg",
+  "/assets/5.jpeg",
+  "/assets/6.jpeg",
+  "/assets/7.jpeg",
+  "/assets/8.jpeg",
+  "/assets/9.jpeg",
+  "/assets/10.webp",
+];
+
 const FEATURES = [
   {
     icon: Compass,
@@ -263,16 +276,7 @@ function TourGridSkeleton() {
   );
 }
 
-function Gallery({ tours }: { tours?: Doc<"tours">[] }) {
-  const featured = (tours ?? []).filter((tour) => tour.featured).slice(0, 3);
-  const slides = featured.flatMap((tour) => {
-    const photos =
-      tour.gallery && tour.gallery.length > 0
-        ? tour.gallery
-        : [tour.imageUrl];
-    return photos.map((src) => ({ src, label: tour.name }));
-  });
-
+function Gallery() {
   return (
     <section id="gallery" className="scroll-mt-24 py-20 lg:py-24">
       <div className="mx-auto w-full max-w-6xl px-4 sm:px-6">
@@ -280,17 +284,14 @@ function Gallery({ tours }: { tours?: Doc<"tours">[] }) {
           <SectionHeader eyebrow="gallery" title="Gallery" />
         </Reveal>
         <div className="mx-auto mt-10 max-w-4xl">
-          {tours === undefined ? (
-            <Skeleton className="aspect-[16/9] w-full rounded-3xl" />
-          ) : slides.length > 0 ? (
-            <Reveal>
-              <PhotoCarousel
-                photos={slides.map((slide) => slide.src)}
-                alt="Batam destinations"
-                itemClassName="aspect-[16/9] rounded-3xl border border-border/60 shadow-sm"
-              />
-            </Reveal>
-          ) : null}
+          <Reveal>
+            <PhotoCarousel
+              photos={GALLERY_PHOTOS}
+              alt="Batam destinations"
+              itemClassName="h-[52vh] max-h-[560px] min-h-[320px] rounded-3xl border border-border/60 bg-muted/40 shadow-sm"
+              imgClassName="size-full object-contain"
+            />
+          </Reveal>
         </div>
       </div>
     </section>
@@ -659,7 +660,7 @@ export default function Landing() {
       <main>
         <Hero />
         <Fleet />
-        <Gallery tours={tours} />
+        <Gallery />
         <BrowseTours tours={tours} />
         <WhyZiTour />
         <HowItWorks />
