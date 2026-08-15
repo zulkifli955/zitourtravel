@@ -33,6 +33,9 @@ import { useLocation } from "react-router";
 const BRIDGE_IMAGE =
   "https://images.unsplash.com/photo-1502920917128-1aa500764cbd?q=80&w=2400&auto=format&fit=crop";
 
+const DRIVER_IMAGE =
+  "https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?q=80&w=1600&auto=format&fit=crop";
+
 const FEATURES = [
   {
     icon: Compass,
@@ -116,10 +119,9 @@ const FLEET = [
   },
 ];
 
-const bookingMessage = (car: (typeof FLEET)[number]) =>
-  `Halo Zi Tour Travel Batam, saya ingin booking mobil ${car.name} (${formatIDR(
-    car.idr,
-  )} per hari). Mohon info ketersediaan untuk tanggal [isi tanggal]. Terima kasih`;
+/** Pre-filled WhatsApp message for fleet bookings. */
+const FLEET_BOOKING_MESSAGE =
+  "Halo Zi Tour Travel Batam, saya tertarik dengan paket tour Anda. Mohon info paket yang tersedia beserta harga, dan apakah tersedia untuk kunjungan pada tanggal [isi tanggal]? Terima kasih";
 
 /* ------------------------------------------------------------------ */
 /* Primitives                                                          */
@@ -354,27 +356,49 @@ function WhyZiTour() {
             eyebrow="why us"
             title="A local team that treats your day like their own"
             copy="Three reasons travelers keep coming back to Zi Tour."
-            center
           />
         </Reveal>
-        <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {FEATURES.map((feature, i) => (
-            <Reveal key={feature.title} delay={i * 0.06} className="h-full">
-              <div className="flex h-full flex-col gap-4 rounded-2xl border border-border/70 bg-card p-6 shadow-sm transition-shadow hover:shadow-md">
-                <span className="flex size-11 items-center justify-center rounded-xl bg-primary/10 text-primary">
-                  <feature.icon className="size-5" />
-                </span>
-                <div>
-                  <h3 className="text-base font-semibold tracking-tight">
-                    {feature.title}
-                  </h3>
-                  <p className="mt-2 text-sm leading-6 text-muted-foreground">
-                    {feature.copy}
+        <div className="mt-12 grid items-stretch gap-6 lg:grid-cols-[1.05fr_1fr]">
+          <Reveal className="h-full">
+            <div className="relative h-full min-h-[320px] overflow-hidden rounded-3xl border border-border/70 shadow-sm">
+              <img
+                src={DRIVER_IMAGE}
+                alt="Zi Tour driver at the wheel of a private car in Batam"
+                loading="lazy"
+                className="absolute inset-0 size-full object-cover"
+              />
+              <div className="absolute inset-x-4 bottom-4">
+                <div className="rounded-2xl border border-white/15 bg-black/55 px-5 py-4 text-white backdrop-blur-sm">
+                  <p className="font-mono text-[11px] font-medium uppercase tracking-[0.2em] text-teal-300">
+                    // your private driver
+                  </p>
+                  <p className="mt-1 text-sm font-medium leading-6 text-white/90">
+                    Every tour comes with its own car and a driver who knows
+                    Batam like the back of their hand.
                   </p>
                 </div>
               </div>
-            </Reveal>
-          ))}
+            </div>
+          </Reveal>
+          <div className="flex flex-col gap-6">
+            {FEATURES.map((feature, i) => (
+              <Reveal key={feature.title} delay={i * 0.06} className="h-full">
+                <div className="flex h-full flex-col gap-4 rounded-2xl border border-border/70 bg-card p-6 shadow-sm transition-shadow hover:shadow-md sm:flex-row sm:items-start">
+                  <span className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                    <feature.icon className="size-5" />
+                  </span>
+                  <div>
+                    <h3 className="text-base font-semibold tracking-tight">
+                      {feature.title}
+                    </h3>
+                    <p className="mt-2 text-sm leading-6 text-muted-foreground">
+                      {feature.copy}
+                    </p>
+                  </div>
+                </div>
+              </Reveal>
+            ))}
+          </div>
         </div>
       </div>
     </section>
@@ -487,7 +511,7 @@ function Fleet() {
                     className="mt-3 w-full rounded-full"
                   >
                     <a
-                      href={waLink(undefined, bookingMessage(car))}
+                      href={waLink(undefined, FLEET_BOOKING_MESSAGE)}
                       target="_blank"
                       rel="noopener noreferrer"
                     >
