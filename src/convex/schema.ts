@@ -53,7 +53,8 @@ const schema = defineSchema(
       sortOrder: v.number(), // controls display order in the grid
     })
       .index("by_category", ["category"])
-      .index("by_featured", ["featured"]),
+      .index("by_featured", ["featured"])
+      .index("by_slug", ["slug"]),
   },
   {
     schemaValidation: false,

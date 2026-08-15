@@ -26,8 +26,8 @@ export default function Dashboard() {
               <Compass className="size-5" />
             </span>
             <div>
-              <p className="text-sm font-bold tracking-tight">Zi Tour · Batam</p>
-              <p className="text-xs text-muted-foreground">Gema Travel Batam</p>
+              <p className="text-sm font-bold tracking-tight">Zi Tour Travel</p>
+              <p className="text-xs text-muted-foreground">Your Batam trips</p>
             </div>
           </div>
           <Button

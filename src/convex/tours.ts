@@ -20,6 +20,20 @@ export const list = query({
 });
 
 /**
+ * Get a single tour by its slug (used by the detail page).
+ * Returns null when no tour matches.
+ */
+export const getBySlug = query({
+  args: { slug: v.string() },
+  handler: async (ctx, { slug }) => {
+    return await ctx.db
+      .query("tours")
+      .withIndex("by_slug", (q) => q.eq("slug", slug))
+      .first();
+  },
+});
+
+/**
  * Idempotent seed for the tours catalog. Only inserts when the table is
  * empty, so it is safe to call from the client on first load.
  */

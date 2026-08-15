@@ -2,18 +2,13 @@ import { api } from "@/convex/_generated/api";
 import type { Doc } from "@/convex/_generated/dataModel";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
+import { SiteFooter } from "@/components/SiteFooter";
+import { SiteNav } from "@/components/SiteNav";
 import { TourCard } from "@/components/tours/TourCard";
-import { useAuth } from "@/hooks/use-auth";
 import { cn, formatIDR } from "@/lib/utils";
+import { waLink } from "@/lib/site";
 import { useMutation, useQuery } from "convex/react";
 import { motion } from "framer-motion";
 import {
@@ -23,30 +18,18 @@ import {
   Compass,
   Headset,
   MapPin,
-  Menu,
   MessageCircle,
   Search,
   Ship,
   Star,
-  Users,
+  X,
 } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
-import { Link } from "react-router";
+import { useLocation } from "react-router";
 
 /* ------------------------------------------------------------------ */
 /* Data                                                                */
 /* ------------------------------------------------------------------ */
-
-/** TODO: replace with the agency's real WhatsApp Business number. */
-const WHATSAPP_NUMBER = "6281234567890";
-
-const CONTACT = {
-  address:
-    "Ruko Mega Legenda Blok F No. 12, Batam Centre, Batam, Kepulauan Riau 29444",
-  phone: "+62 812-3456-7890",
-  email: "hello@gematravelbatam.com",
-  hours: "Mon–Sun · 08:00–21:00 WIB",
-};
 
 const HERO_IMAGE =
   "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1800&auto=format&fit=crop";
@@ -133,15 +116,6 @@ const AVATAR_TINTS = [
   "bg-primary/60 text-primary-foreground",
 ];
 
-function waLink(tour?: { name: string; price?: number }) {
-  const text = tour
-    ? `Halo Zi Tour! Saya ingin memesan paket "${tour.name}"${
-        tour.price ? ` (${formatIDR(tour.price)})` : ""
-      }. Mohon info ketersediaan ya.`
-    : "Halo Zi Tour! Saya ingin bertanya tentang paket tur di Batam.";
-  return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`;
-}
-
 /* ------------------------------------------------------------------ */
 /* Primitives                                                          */
 /* ------------------------------------------------------------------ */
@@ -181,7 +155,8 @@ function SectionHeader({
 }) {
   return (
     <div className={cn("max-w-2xl", center && "mx-auto text-center")}>
-      <p className="text-xs font-semibold uppercase tracking-[0.18em] text-primary">
+      <p className="font-mono text-xs font-medium uppercase tracking-[0.2em] text-primary">
+        <span className="text-primary/50">//&nbsp;</span>
         {eyebrow}
       </p>
       <h2 className="mt-3 text-balance text-3xl font-bold tracking-tight sm:text-4xl">
@@ -210,122 +185,21 @@ function Stars({ className }: { className?: string }) {
 }
 
 /* ------------------------------------------------------------------ */
-/* Navbar                                                              */
-/* ------------------------------------------------------------------ */
-
-const NAV_LINKS = [
-  { label: "Tours", href: "#tours" },
-  { label: "Featured", href: "#featured" },
-  { label: "Why Zi Tour", href: "#why" },
-  { label: "Reviews", href: "#reviews" },
-];
-
-function Navbar() {
-  const { isAuthenticated } = useAuth();
-  const [open, setOpen] = useState(false);
-
-  return (
-    <header className="fixed inset-x-0 top-0 z-40 border-b border-border/60 bg-background/85 backdrop-blur-md">
-      <div className="mx-auto flex h-16 w-full max-w-6xl items-center justify-between px-4 sm:px-6">
-        <a href="#top" className="flex items-center gap-2.5">
-          <span className="flex size-9 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-sm">
-            <Compass className="size-5" />
-          </span>
-          <span className="text-lg font-bold tracking-tight">Zi Tour</span>
-          <span className="hidden text-sm font-medium text-muted-foreground sm:inline">
-            · Batam
-          </span>
-        </a>
-
-        <nav className="hidden items-center gap-7 md:flex">
-          {NAV_LINKS.map((link) => (
-            <a
-              key={link.href}
-              href={link.href}
-              className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
-            >
-              {link.label}
-            </a>
-          ))}
-        </nav>
-
-        <div className="hidden items-center gap-3 md:flex">
-          {isAuthenticated ? (
-            <Button asChild variant="ghost" size="sm">
-              <Link to="/dashboard">My dashboard</Link>
-            </Button>
-          ) : (
-            <Button asChild variant="ghost" size="sm">
-              <Link to="/auth">Sign in</Link>
-            </Button>
-          )}
-          <Button asChild size="sm" className="rounded-full px-4">
-            <a href="#tours">Browse tours</a>
-          </Button>
-        </div>
-
-        <Sheet open={open} onOpenChange={setOpen}>
-          <SheetTrigger asChild>
-            <Button
-              variant="ghost"
-              size="icon"
-              className="md:hidden"
-              aria-label="Open menu"
-            >
-              <Menu className="size-5" />
-            </Button>
-          </SheetTrigger>
-          <SheetContent side="right" className="w-72">
-            <SheetHeader className="border-b">
-              <SheetTitle>Zi Tour · Batam</SheetTitle>
-              <SheetDescription>
-                Day tours & experiences across Batam, Indonesia.
-              </SheetDescription>
-            </SheetHeader>
-            <nav className="flex flex-col gap-1 px-2">
-              {NAV_LINKS.map((link) => (
-                <a
-                  key={link.href}
-                  href={link.href}
-                  onClick={() => setOpen(false)}
-                  className="rounded-lg px-3 py-2.5 text-sm font-medium text-foreground/80 transition-colors hover:bg-accent hover:text-foreground"
-                >
-                  {link.label}
-                </a>
-              ))}
-              <div className="mt-4 flex flex-col gap-2 border-t pt-4">
-                {isAuthenticated ? (
-                  <Button asChild onClick={() => setOpen(false)}>
-                    <Link to="/dashboard">My dashboard</Link>
-                  </Button>
-                ) : (
-                  <Button asChild variant="outline" onClick={() => setOpen(false)}>
-                    <Link to="/auth">Sign in</Link>
-                  </Button>
-                )}
-                <Button asChild onClick={() => setOpen(false)}>
-                  <a href="#tours">Browse tours</a>
-                </Button>
-              </div>
-            </nav>
-          </SheetContent>
-        </Sheet>
-      </div>
-    </header>
-  );
-}
-
-/* ------------------------------------------------------------------ */
 /* Hero                                                                */
 /* ------------------------------------------------------------------ */
 
 function Hero() {
   return (
     <section id="top" className="relative overflow-hidden pt-16">
+      {/* Dotted technical texture, faint under everything */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle,color-mix(in_oklab,var(--foreground)_9%,transparent)_1px,transparent_1px)] bg-[size:26px_26px] opacity-60 [mask-image:linear-gradient(to_bottom,black,transparent)]"
+      />
       <div className="pointer-events-none absolute -top-24 right-[-8%] size-[26rem] rounded-full bg-primary/10 blur-3xl" />
       <div className="pointer-events-none absolute left-[-10%] top-48 size-96 rounded-full bg-accent/60 blur-3xl" />
 
-      <div className="mx-auto grid w-full max-w-6xl items-center gap-14 px-4 pb-16 pt-14 sm:px-6 lg:grid-cols-2 lg:gap-16 lg:pb-20 lg:pt-20">
+      <div className="relative mx-auto grid w-full max-w-6xl items-center gap-14 px-4 pb-16 pt-14 sm:px-6 lg:grid-cols-2 lg:gap-16 lg:pb-20 lg:pt-20">
         <div>
           <Reveal>
             <Badge
@@ -338,15 +212,15 @@ function Hero() {
           </Reveal>
           <Reveal delay={0.05}>
             <h1 className="mt-6 text-balance text-4xl font-bold tracking-tight sm:text-5xl lg:text-[3.4rem] lg:leading-[1.06]">
-              Your Batam adventure,{" "}
-              <span className="text-primary">sorted in minutes.</span>
+              Batam&apos;s best day tours,{" "}
+              <span className="text-primary">without the planning.</span>
             </h1>
           </Reveal>
           <Reveal delay={0.1}>
             <p className="mt-5 max-w-xl text-pretty text-base leading-7 text-muted-foreground sm:text-lg sm:leading-8">
-              From Barelang&apos;s bridges to Nongsa&apos;s beaches — handpicked
-              day tours, private cars and local guides. Pick a package, message
-              us on WhatsApp, and you&apos;re set.
+              A catalog of private, guided day trips — Barelang&apos;s bridges,
+              Nongsa&apos;s beaches, Marina&apos;s night market. Browse, pick
+              one, and message us on WhatsApp.
             </p>
           </Reveal>
           <Reveal delay={0.15}>
@@ -409,7 +283,7 @@ function Hero() {
               transition={{ repeat: Infinity, duration: 6, ease: "easeInOut" }}
               className="absolute -bottom-7 -left-3 w-60 rounded-2xl border border-border/70 bg-card/95 p-4 shadow-md backdrop-blur sm:-left-8 sm:w-64"
             >
-              <p className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">
+              <p className="font-mono text-[10px] font-medium uppercase tracking-[0.14em] text-muted-foreground">
                 Most booked this week
               </p>
               <p className="mt-1.5 text-sm font-semibold leading-snug tracking-tight">
@@ -427,16 +301,16 @@ function Hero() {
               </div>
             </motion.div>
 
-            <div className="absolute -top-4 right-4 flex items-center gap-2 rounded-full border border-border/70 bg-card/95 px-3.5 py-2 text-xs font-medium shadow-sm backdrop-blur">
+            <div className="absolute -top-4 right-4 flex items-center gap-2 rounded-full border border-border/70 bg-card/95 px-3.5 py-2 font-mono text-[11px] font-medium shadow-sm backdrop-blur">
               <Ship className="size-4 text-primary" />
-              Island &amp; beach tours
+              island &amp; beach
             </div>
           </div>
         </Reveal>
       </div>
 
       {/* Stats strip */}
-      <div className="mx-auto w-full max-w-6xl px-4 sm:px-6">
+      <div className="relative mx-auto w-full max-w-6xl px-4 sm:px-6">
         <Reveal delay={0.1}>
           <div className="grid grid-cols-2 gap-px overflow-hidden rounded-2xl border bg-border md:grid-cols-4">
             {STATS.map((stat) => (
@@ -493,9 +367,9 @@ function FeaturedTours({ tours }: { tours?: Doc<"tours">[] }) {
         <Reveal>
           <div className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
             <SectionHeader
-              eyebrow="Featured"
-              title="Our most-loved Batam experiences"
-              copy="The tours travelers keep booking, again and again."
+              eyebrow="featured"
+              title="Tours travelers keep rebooking"
+              copy="The three most-booked experiences in the catalog right now."
             />
             <Button asChild variant="outline" className="w-fit rounded-full">
               <a href="#tours">
@@ -528,75 +402,117 @@ function BrowseTours({ tours }: { tours?: Doc<"tours">[] }) {
     [tours],
   );
   const [active, setActive] = useState("all");
+  const [query, setQuery] = useState("");
+
+  const normalized = query.trim().toLowerCase();
   const visible = useMemo(
     () =>
       (tours ?? []).filter(
-        (tour) => active === "all" || tour.category === active,
+        (tour) =>
+          (active === "all" || tour.category === active) &&
+          (normalized.length === 0 ||
+            [tour.name, tour.tagline, tour.location, tour.category].some(
+              (field) => field.toLowerCase().includes(normalized),
+            )),
       ),
-    [tours, active],
+    [tours, active, normalized],
   );
+
+  const resetFilters = () => {
+    setActive("all");
+    setQuery("");
+  };
 
   return (
     <section id="tours" className="scroll-mt-24 bg-card/60 py-20 lg:py-24">
       <div className="mx-auto w-full max-w-6xl px-4 sm:px-6">
         <Reveal>
           <SectionHeader
-            eyebrow="Browse tours"
-            title="Every Batam day trip, in one place"
-            copy="Pick a category or scroll the full catalog. Every package is private, guided and priced per person."
+            eyebrow="catalog"
+            title="Browse every tour we run"
+            copy="Search by name, place or vibe — or filter by category. Every package is private, guided and priced per person."
           />
         </Reveal>
 
         <Reveal delay={0.05}>
-          <div className="mt-8 flex flex-wrap items-center gap-2">
-            <button
-              type="button"
-              onClick={() => setActive("all")}
-              aria-pressed={active === "all"}
-              className={cn(
-                "rounded-full border px-4 py-2 text-sm font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
-                active === "all"
-                  ? "border-transparent bg-primary text-primary-foreground shadow-sm"
-                  : "border-border bg-card text-muted-foreground hover:border-border hover:bg-accent hover:text-foreground",
+          <div className="mt-8 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+            <div className="relative w-full max-w-md">
+              <Search className="absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+              <Input
+                type="search"
+                value={query}
+                onChange={(event) => setQuery(event.target.value)}
+                placeholder="Try “bridge”, “beach” or “night market”…"
+                aria-label="Search tours"
+                className="h-11 rounded-full border-border bg-card pl-10 pr-10 shadow-sm"
+              />
+              {query.length > 0 && (
+                <button
+                  type="button"
+                  onClick={() => setQuery("")}
+                  aria-label="Clear search"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full p-1 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+                >
+                  <X className="size-4" />
+                </button>
               )}
-            >
-              All tours
-              <span className="ml-1.5 text-xs opacity-70">
-                {tours?.length ?? 0}
-              </span>
-            </button>
-            {categories.map((category) => (
+            </div>
+
+            <div className="flex flex-wrap items-center gap-2">
               <button
-                key={category}
                 type="button"
-                onClick={() => setActive(category)}
-                aria-pressed={active === category}
+                onClick={() => setActive("all")}
+                aria-pressed={active === "all"}
                 className={cn(
                   "rounded-full border px-4 py-2 text-sm font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
-                  active === category
+                  active === "all"
                     ? "border-transparent bg-primary text-primary-foreground shadow-sm"
                     : "border-border bg-card text-muted-foreground hover:border-border hover:bg-accent hover:text-foreground",
                 )}
               >
-                {category}
+                All tours
                 <span className="ml-1.5 text-xs opacity-70">
-                  {
-                    (tours ?? []).filter((tour) => tour.category === category)
-                      .length
-                  }
+                  {tours?.length ?? 0}
                 </span>
               </button>
-            ))}
+              {categories.map((category) => (
+                <button
+                  key={category}
+                  type="button"
+                  onClick={() => setActive(category)}
+                  aria-pressed={active === category}
+                  className={cn(
+                    "rounded-full border px-4 py-2 text-sm font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
+                    active === category
+                      ? "border-transparent bg-primary text-primary-foreground shadow-sm"
+                      : "border-border bg-card text-muted-foreground hover:border-border hover:bg-accent hover:text-foreground",
+                  )}
+                >
+                  {category}
+                  <span className="ml-1.5 text-xs opacity-70">
+                    {
+                      (tours ?? []).filter(
+                        (tour) => tour.category === category,
+                      ).length
+                    }
+                  </span>
+                </button>
+              ))}
+            </div>
           </div>
         </Reveal>
 
         <p
-          className="mt-5 text-sm text-muted-foreground"
+          className="mt-5 font-mono text-xs text-muted-foreground"
           aria-live="polite"
         >
           {tours !== undefined &&
             `${visible.length} tour${visible.length === 1 ? "" : "s"}${
-              active === "all" ? " · all categories" : ` · ${active}`
+              normalized.length > 0
+                ? ` · matching “${query.trim()}”`
+                : active === "all"
+                  ? " · all categories"
+                  : ` · ${active}`
             }`}
         </p>
 
@@ -610,19 +526,20 @@ function BrowseTours({ tours }: { tours?: Doc<"tours">[] }) {
               </span>
               <div>
                 <p className="text-base font-semibold tracking-tight">
-                  No tours in this category yet
+                  No tours found
                 </p>
                 <p className="mt-1 text-sm text-muted-foreground">
-                  Try another category, or reset the filter.
+                  Nothing matches that search — try another keyword, or clear
+                  the filters.
                 </p>
               </div>
               <Button
                 variant="outline"
                 size="sm"
                 className="rounded-full"
-                onClick={() => setActive("all")}
+                onClick={resetFilters}
               >
-                Show all tours
+                Clear search &amp; filters
               </Button>
             </div>
           ) : (
@@ -650,8 +567,9 @@ function WhyZiTour() {
       <div className="mx-auto w-full max-w-6xl px-4 sm:px-6">
         <Reveal>
           <SectionHeader
-            eyebrow="Why Zi Tour"
+            eyebrow="why us"
             title="A local team that treats your day like their own"
+            copy="Four reasons travelers keep coming back to Zi Tour."
             center
           />
         </Reveal>
@@ -685,8 +603,9 @@ function HowItWorks() {
       <div className="mx-auto w-full max-w-6xl px-4 sm:px-6">
         <Reveal>
           <SectionHeader
-            eyebrow="How it works"
+            eyebrow="how it works"
             title="From browsing to beach in three steps"
+            copy="No booking portals, no deposits — just a conversation and a car."
             center
           />
         </Reveal>
@@ -694,7 +613,7 @@ function HowItWorks() {
           {STEPS.map((step, i) => (
             <Reveal key={step.n} delay={i * 0.08} className="h-full">
               <div className="relative flex h-full flex-col gap-4 rounded-2xl border border-border/70 bg-card p-6 shadow-sm">
-                <span className="absolute right-5 top-4 text-4xl font-bold tracking-tight text-primary/15">
+                <span className="absolute right-5 top-4 font-mono text-4xl font-bold tracking-tight text-primary/15">
                   {step.n}
                 </span>
                 <span className="flex size-11 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-sm">
@@ -723,9 +642,9 @@ function Reviews() {
       <div className="mx-auto w-full max-w-6xl px-4 sm:px-6">
         <Reveal>
           <SectionHeader
-            eyebrow="Reviews"
+            eyebrow="reviews"
             title="Travelers who came, saw, and came back"
-            copy="Real reviews from guests across Singapore, Malaysia and Indonesia."
+            copy="Guests from Singapore, Malaysia and Indonesia, in their own words."
           />
         </Reveal>
         <div className="mt-12 grid gap-6 md:grid-cols-3">
@@ -759,7 +678,7 @@ function Reviews() {
 }
 
 /* ------------------------------------------------------------------ */
-/* CTA + Footer                                                        */
+/* CTA                                                                 */
 /* ------------------------------------------------------------------ */
 
 function CtaBand() {
@@ -772,11 +691,11 @@ function CtaBand() {
             <div className="pointer-events-none absolute -bottom-28 -right-16 size-80 rounded-full bg-white/10 blur-2xl" />
             <div className="relative mx-auto max-w-2xl">
               <h2 className="text-balance text-3xl font-bold tracking-tight text-primary-foreground sm:text-4xl">
-                Your Batam day trip starts here.
+                Your next Batam day is one message away.
               </h2>
               <p className="mt-4 text-pretty text-base leading-7 text-primary-foreground/85">
-                Pick a tour, message us on WhatsApp, and be on the water by
-                tomorrow.
+                Pick a tour, tell us when you&apos;re free, and we&apos;ll
+                handle the rest.
               </p>
               <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
                 <Button
@@ -805,126 +724,6 @@ function CtaBand() {
   );
 }
 
-function Footer() {
-  return (
-    <footer id="contact" className="scroll-mt-24 border-t bg-card">
-      <div className="mx-auto w-full max-w-6xl px-4 py-14 sm:px-6">
-        <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-4">
-          <div>
-            <a href="#top" className="flex items-center gap-2.5">
-              <span className="flex size-9 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-sm">
-                <Compass className="size-5" />
-              </span>
-              <span className="text-lg font-bold tracking-tight">Zi Tour</span>
-            </a>
-            <p className="mt-4 max-w-xs text-sm leading-6 text-muted-foreground">
-              Day tours &amp; experiences across Batam, run by the Gema Travel
-              Batam team since 2014.
-            </p>
-            <a
-              href={waLink()}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="mt-5 inline-flex items-center gap-2 text-sm font-medium text-primary hover:text-primary/80"
-            >
-              <MessageCircle className="size-4" /> Chat on WhatsApp
-            </a>
-          </div>
-
-          <div>
-            <h3 className="text-sm font-semibold tracking-tight">Explore</h3>
-            <ul className="mt-4 space-y-3 text-sm text-muted-foreground">
-              <li>
-                <a href="#tours" className="transition-colors hover:text-foreground">
-                  All tours
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#featured"
-                  className="transition-colors hover:text-foreground"
-                >
-                  Featured tours
-                </a>
-              </li>
-              <li>
-                <a href="#why" className="transition-colors hover:text-foreground">
-                  Why Zi Tour
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#reviews"
-                  className="transition-colors hover:text-foreground"
-                >
-                  Traveler reviews
-                </a>
-              </li>
-            </ul>
-          </div>
-
-          <div>
-            <h3 className="text-sm font-semibold tracking-tight">Company</h3>
-            <ul className="mt-4 space-y-3 text-sm text-muted-foreground">
-              <li>
-                <a href="#how" className="transition-colors hover:text-foreground">
-                  How it works
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#contact"
-                  className="transition-colors hover:text-foreground"
-                >
-                  Contact us
-                </a>
-              </li>
-              <li>
-                <a
-                  href={`mailto:${CONTACT.email}`}
-                  className="transition-colors hover:text-foreground"
-                >
-                  {CONTACT.email}
-                </a>
-              </li>
-              <li>
-                <a
-                  href={`tel:${CONTACT.phone.replace(/[^+\d]/g, "")}`}
-                  className="transition-colors hover:text-foreground"
-                >
-                  {CONTACT.phone}
-                </a>
-              </li>
-            </ul>
-          </div>
-
-          <div>
-            <h3 className="text-sm font-semibold tracking-tight">Visit us</h3>
-            <ul className="mt-4 space-y-3 text-sm text-muted-foreground">
-              <li className="flex items-start gap-2.5">
-                <MapPin className="mt-0.5 size-4 shrink-0 text-primary" />
-                {CONTACT.address}
-              </li>
-              <li className="flex items-center gap-2.5">
-                <Users className="size-4 shrink-0 text-primary" />
-                {CONTACT.hours}
-              </li>
-            </ul>
-          </div>
-        </div>
-
-        <div className="mt-12 flex flex-col items-center justify-between gap-3 border-t pt-6 text-xs text-muted-foreground sm:flex-row">
-          <p>
-            © {new Date().getFullYear()} Zi Tour Travel Batam · Gema Travel
-            Batam. All rights reserved.
-          </p>
-          <p>Private tours · Local guides · Pay on arrival</p>
-        </div>
-      </div>
-    </footer>
-  );
-}
-
 /* ------------------------------------------------------------------ */
 /* Page                                                                */
 /* ------------------------------------------------------------------ */
@@ -932,6 +731,7 @@ function Footer() {
 export default function Landing() {
   const tours = useQuery(api.tours.list, {});
   const seedTours = useMutation(api.tours.seed);
+  const location = useLocation();
 
   // Seed the catalog on first load so the site works in any environment.
   useEffect(() => {
@@ -940,9 +740,20 @@ export default function Landing() {
     }
   }, [tours, seedTours]);
 
+  // Scroll to the anchor when landing via "/#tours" style links from
+  // another page (the browser can't do this before the SPA renders).
+  useEffect(() => {
+    if (location.hash) {
+      const el = document.querySelector(location.hash);
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    }
+  }, [location.hash]);
+
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <Navbar />
+      <SiteNav />
       <main>
         <Hero />
         <FeaturedTours tours={tours} />
@@ -952,7 +763,7 @@ export default function Landing() {
         <Reviews />
         <CtaBand />
       </main>
-      <Footer />
+      <SiteFooter />
     </div>
   );
 }

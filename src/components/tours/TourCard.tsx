@@ -1,9 +1,10 @@
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import type { Doc } from "@/convex/_generated/dataModel";
 import { formatIDR } from "@/lib/utils";
 import { Clock, MapPin, Sparkles, Star } from "lucide-react";
-import { TourDetailDialog } from "./TourDetailDialog";
+import { Link } from "react-router";
 
 export function TourCard({ tour }: { tour: Doc<"tours"> }) {
   return (
@@ -59,7 +60,9 @@ export function TourCard({ tour }: { tour: Doc<"tours"> }) {
             </p>
             <p className="text-[11px] text-muted-foreground">per person</p>
           </div>
-          <TourDetailDialog tour={tour} />
+          <Button asChild variant="outline" size="sm" className="rounded-full px-4">
+            <Link to={`/tours/${tour.slug}`}>View tour</Link>
+          </Button>
         </div>
       </div>
     </Card>
