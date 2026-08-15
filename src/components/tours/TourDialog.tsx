@@ -9,20 +9,13 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { PhotoCarousel } from "@/components/PhotoCarousel";
 import type { Doc } from "@/convex/_generated/dataModel";
-import { cn } from "@/lib/utils";
-import {
-  CalendarDays,
-  Clock,
-  MapPin,
-  Star,
-  X,
-} from "lucide-react";
-import { useState } from "react";
+import { CalendarDays, Clock, MapPin, Star, X } from "lucide-react";
 
 /**
- * Popup with the tour's photos and the caption (description) of the
- * destination. Trigger is supplied by the caller so cards can open it.
+ * Popup with the tour's photos (slider) and the caption (description) of
+ * the destination. Trigger is supplied by the caller so cards can open it.
  */
 export function TourDialog({
   tour,
@@ -36,7 +29,6 @@ export function TourDialog({
     tour.gallery && tour.gallery.length > 0
       ? tour.gallery
       : [tour.imageUrl];
-  const [active, setActive] = useState(0);
 
   return (
     <Dialog>
@@ -45,61 +37,34 @@ export function TourDialog({
         showCloseButton={false}
         className="max-h-[90vh] flex-col gap-0 overflow-hidden p-0 sm:max-w-2xl"
       >
-        {/* Main photo */}
-        <div className="relative aspect-[16/9] shrink-0 bg-muted">
-          <img
-            src={photos[active]}
+        {/* Photo slider */}
+        <div className="shrink-0">
+          <PhotoCarousel
+            photos={photos}
             alt={tour.name}
-            className="size-full object-cover"
+            overlay={
+              <div className="absolute inset-x-4 top-4 flex flex-wrap items-center gap-2.5">
+                <Badge className="border-0 bg-card/90 text-card-foreground shadow-sm backdrop-blur-sm">
+                  {tour.category}
+                </Badge>
+                <span className="inline-flex items-center gap-1.5 rounded-full bg-card/90 px-2.5 py-0.5 text-xs font-medium text-card-foreground shadow-sm backdrop-blur-sm">
+                  <Star className="size-3.5 fill-amber-400 text-amber-400" />
+                  {tour.rating.toFixed(1)} ({tour.reviewCount})
+                </span>
+              </div>
+            }
           />
-          <div className="absolute inset-0 bg-linear-to-t from-black/65 via-black/10 to-transparent" />
-          <div className="absolute inset-x-5 bottom-4 flex flex-wrap items-center gap-2.5 text-white">
-            <Badge className="border-0 bg-white/20 text-white backdrop-blur-sm">
-              {tour.category}
-            </Badge>
-            <span className="inline-flex items-center gap-1.5 text-sm font-medium drop-shadow-sm">
-              <Star className="size-4 fill-amber-400 text-amber-400" />
-              {tour.rating.toFixed(1)} ({tour.reviewCount} reviews)
-            </span>
-          </div>
           <DialogClose asChild>
             <Button
               variant="ghost"
               size="icon"
               aria-label="Close tour details"
-              className="absolute right-4 top-4 z-10 size-8 rounded-full border-0 bg-black/35 text-white backdrop-blur-sm hover:bg-black/50 hover:text-white"
+              className="absolute right-4 top-4 z-20 size-8 rounded-full border-0 bg-black/35 text-white backdrop-blur-sm hover:bg-black/50 hover:text-white"
             >
               <X className="size-4" />
             </Button>
           </DialogClose>
         </div>
-
-        {/* Photo thumbnails */}
-        {photos.length > 1 && (
-          <div className="flex shrink-0 gap-2 overflow-x-auto px-6 pb-1 pt-4">
-            {photos.map((src, index) => (
-              <button
-                key={src}
-                type="button"
-                onClick={() => setActive(index)}
-                aria-label={`Show photo ${index + 1} of ${photos.length}`}
-                aria-pressed={index === active}
-                className={cn(
-                  "h-16 w-24 shrink-0 cursor-pointer overflow-hidden rounded-lg border-2 transition-all focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
-                  index === active
-                    ? "border-primary"
-                    : "border-transparent opacity-60 hover:opacity-100",
-                )}
-              >
-                <img
-                  src={src}
-                  alt={`${tour.name} photo ${index + 1}`}
-                  className="size-full object-cover"
-                />
-              </button>
-            ))}
-          </div>
-        )}
 
         {/* Caption of the destination */}
         <div className="flex flex-col gap-5 overflow-y-auto p-6 sm:p-7">

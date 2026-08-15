@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteNav } from "@/components/SiteNav";
+import { PhotoCarousel } from "@/components/PhotoCarousel";
 import { TourCard } from "@/components/tours/TourCard";
 import { WhatsAppButton } from "@/components/WhatsAppButton";
 import { cn, formatIDR } from "@/lib/utils";
@@ -21,7 +22,6 @@ import {
   MapPin,
   MessageCircle,
   Phone,
-  Star,
 } from "lucide-react";
 import { useEffect } from "react";
 import { useLocation } from "react-router";
@@ -72,26 +72,54 @@ const STEPS = [
   },
 ];
 
-/** Daily rates (private car with driver). */
+/** Daily rates (private car with driver). TODO: replace with real fleet photos. */
 const FLEET = [
-  { name: "Toyota Avanza All New", idr: 400000, rm: 115, sgd: 34 },
-  { name: "Toyota Terios", idr: 450000, rm: 130, sgd: 39 },
-  { name: "Daihatsu Xenia", idr: 400000, rm: 115, sgd: 34 },
-  { name: "Toyota Innova", idr: 600000, rm: 175, sgd: 52 },
-  { name: "Toyota Zenix", idr: 750000, rm: 220, sgd: 65 },
+  {
+    name: "Toyota Avanza All New",
+    image:
+      "https://images.unsplash.com/photo-1541899481282-d53bffe3c35d?q=80&w=1200&auto=format&fit=crop",
+    idr: 400000,
+    rm: 115,
+    sgd: 34,
+  },
+  {
+    name: "Toyota Terios",
+    image:
+      "https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?q=80&w=1200&auto=format&fit=crop",
+    idr: 450000,
+    rm: 130,
+    sgd: 39,
+  },
+  {
+    name: "Daihatsu Xenia",
+    image:
+      "https://images.unsplash.com/photo-1552519507-da3b142c6e3d?q=80&w=1200&auto=format&fit=crop",
+    idr: 400000,
+    rm: 115,
+    sgd: 34,
+  },
+  {
+    name: "Toyota Innova",
+    image:
+      "https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?q=80&w=1200&auto=format&fit=crop",
+    idr: 600000,
+    rm: 175,
+    sgd: 52,
+  },
+  {
+    name: "Toyota Zenix",
+    image:
+      "https://images.unsplash.com/photo-1621007947382-bb3c3994e3fb?q=80&w=1200&auto=format&fit=crop",
+    idr: 750000,
+    rm: 220,
+    sgd: 65,
+  },
 ];
 
 const bookingMessage = (car: (typeof FLEET)[number]) =>
   `Halo Zi Tour Travel Batam, saya ingin booking mobil ${car.name} (${formatIDR(
     car.idr,
   )} per hari). Mohon info ketersediaan untuk tanggal [isi tanggal]. Terima kasih`;
-
-const AVATAR_TINTS = [
-  "bg-primary text-primary-foreground",
-  "bg-accent text-accent-foreground",
-  "bg-secondary text-secondary-foreground",
-  "bg-primary/60 text-primary-foreground",
-];
 
 /* ------------------------------------------------------------------ */
 /* Primitives                                                          */
@@ -144,19 +172,6 @@ function SectionHeader({
           {copy}
         </p>
       )}
-    </div>
-  );
-}
-
-function Stars({ className }: { className?: string }) {
-  return (
-    <div
-      className={cn("flex items-center gap-0.5", className)}
-      aria-label="Rated 5 out of 5 stars"
-    >
-      {Array.from({ length: 5 }).map((_, i) => (
-        <Star key={i} className="size-4 fill-amber-400 text-amber-400" />
-      ))}
     </div>
   );
 }
@@ -221,30 +236,6 @@ function Hero() {
                 </Button>
               </div>
             </Reveal>
-            <Reveal delay={0.2}>
-              <div className="mt-9 flex items-center gap-4">
-                <div className="flex -space-x-2.5">
-                  {["SL", "BS", "MC", "AR"].map((initials, i) => (
-                    <span
-                      key={initials}
-                      className={cn(
-                        "flex size-9 items-center justify-center rounded-full border-2 border-white/30 text-[11px] font-semibold",
-                        AVATAR_TINTS[i % AVATAR_TINTS.length],
-                      )}
-                    >
-                      {initials}
-                    </span>
-                  ))}
-                </div>
-                <div className="text-sm">
-                  <Stars />
-                  <p className="mt-0.5 text-white/85">
-                    <span className="font-semibold text-white">4.9/5</span>{" "}
-                    from 2,300+ travelers
-                  </p>
-                </div>
-              </div>
-            </Reveal>
           </div>
         </div>
       </div>
@@ -279,6 +270,13 @@ function TourGridSkeleton() {
 
 function Gallery({ tours }: { tours?: Doc<"tours">[] }) {
   const featured = (tours ?? []).filter((tour) => tour.featured).slice(0, 3);
+  const slides = featured.flatMap((tour) => {
+    const photos =
+      tour.gallery && tour.gallery.length > 0
+        ? tour.gallery
+        : [tour.imageUrl];
+    return photos.map((src) => ({ src, label: tour.name }));
+  });
 
   return (
     <section id="gallery" className="scroll-mt-24 py-20 lg:py-24">
@@ -286,25 +284,18 @@ function Gallery({ tours }: { tours?: Doc<"tours">[] }) {
         <Reveal>
           <SectionHeader eyebrow="gallery" title="Gallery" />
         </Reveal>
-        <div className="mt-10">
+        <div className="mx-auto mt-10 max-w-4xl">
           {tours === undefined ? (
-            <TourGridSkeleton />
-          ) : (
-            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {featured.map((tour, i) => (
-                <Reveal key={tour._id} delay={i * 0.06} className="h-full">
-                  <div className="group aspect-[4/3] overflow-hidden rounded-2xl border border-border/70 bg-muted shadow-sm">
-                    <img
-                      src={tour.imageUrl}
-                      alt={tour.name}
-                      loading="lazy"
-                      className="size-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
-                    />
-                  </div>
-                </Reveal>
-              ))}
-            </div>
-          )}
+            <Skeleton className="aspect-[16/9] w-full rounded-3xl" />
+          ) : slides.length > 0 ? (
+            <Reveal>
+              <PhotoCarousel
+                photos={slides.map((slide) => slide.src)}
+                alt="Batam destinations"
+                itemClassName="aspect-[16/9] rounded-3xl border border-border/60 shadow-sm"
+              />
+            </Reveal>
+          ) : null}
         </div>
       </div>
     </section>
@@ -444,11 +435,16 @@ function Fleet() {
         <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {FLEET.map((car, i) => (
             <Reveal key={car.name} delay={i * 0.06} className="h-full">
-              <div className="flex h-full flex-col gap-5 rounded-2xl border border-border/70 bg-card p-6 shadow-sm transition-shadow hover:shadow-md">
-                <div className="flex items-center gap-3">
-                  <span className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
-                    <CarFront className="size-5" />
-                  </span>
+              <div className="flex h-full flex-col gap-5 overflow-hidden rounded-2xl border border-border/70 bg-card p-0 shadow-sm transition-shadow hover:shadow-md">
+                <div className="aspect-[16/10] shrink-0 overflow-hidden bg-muted">
+                  <img
+                    src={car.image}
+                    alt={car.name}
+                    loading="lazy"
+                    className="size-full object-cover transition-transform duration-500 hover:scale-[1.04]"
+                  />
+                </div>
+                <div className="flex flex-1 flex-col gap-5 px-6 pb-6">
                   <div>
                     <h3 className="text-base font-semibold tracking-tight">
                       {car.name}
@@ -457,8 +453,7 @@ function Fleet() {
                       Private car with driver · per day
                     </p>
                   </div>
-                </div>
-                <div className="mt-auto">
+                  <div className="mt-auto">
                   <div className="grid grid-cols-3 gap-2 rounded-xl border bg-muted/50 p-3 text-center">
                     <div>
                       <p className="font-mono text-[10px] font-medium uppercase tracking-wider text-muted-foreground">
@@ -499,6 +494,7 @@ function Fleet() {
                       <MessageCircle className="size-4" /> Booking
                     </a>
                   </Button>
+                  </div>
                 </div>
               </div>
             </Reveal>
@@ -661,7 +657,6 @@ export default function Landing() {
         <BrowseTours tours={tours} />
         <WhyZiTour />
         <HowItWorks />
-        <Fleet />
         <Location />
         <CtaBand />
       </main>
