@@ -10,7 +10,6 @@ import "./index.css";
 
 // Lazy load route components for better code splitting
 const Landing = lazy(() => import("./pages/Landing.tsx"));
-const TourDetail = lazy(() => import("./pages/TourDetail.tsx"));
 const NotFound = lazy(() => import("./pages/NotFound.tsx"));
 
 // Simple loading fallback for route transitions
@@ -118,7 +117,6 @@ createRoot(document.getElementById("root")!).render(
           <Suspense fallback={<RouteLoading />}>
             <Routes>
               <Route path="/" element={<Landing />} />
-              <Route path="/tours/:slug" element={<TourDetail />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </Suspense>

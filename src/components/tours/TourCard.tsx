@@ -4,7 +4,7 @@ import { Card } from "@/components/ui/card";
 import type { Doc } from "@/convex/_generated/dataModel";
 import { formatIDR } from "@/lib/utils";
 import { Clock, MapPin, Sparkles, Star } from "lucide-react";
-import { Link } from "react-router";
+import { TourDialog } from "./TourDialog";
 
 export function TourCard({ tour }: { tour: Doc<"tours"> }) {
   return (
@@ -60,9 +60,14 @@ export function TourCard({ tour }: { tour: Doc<"tours"> }) {
             </p>
             <p className="text-[11px] text-muted-foreground">per person</p>
           </div>
-          <Button asChild variant="outline" size="sm" className="rounded-full px-4">
-            <Link to={`/tours/${tour.slug}`}>View tour</Link>
-          </Button>
+          <TourDialog
+            tour={tour}
+            trigger={
+              <Button variant="outline" size="sm" className="rounded-full px-4">
+                View tour
+              </Button>
+            }
+          />
         </div>
       </div>
     </Card>

@@ -2,11 +2,11 @@ import { api } from "@/convex/_generated/api";
 import type { Doc } from "@/convex/_generated/dataModel";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteNav } from "@/components/SiteNav";
 import { TourCard } from "@/components/tours/TourCard";
+import { TourDialog } from "@/components/tours/TourDialog";
 import { WhatsAppButton } from "@/components/WhatsAppButton";
 import { cn } from "@/lib/utils";
 import { CONTACT, MAPS_EMBED_URL, MAPS_LINK, waLink } from "@/lib/site";
@@ -22,11 +22,9 @@ import {
   MapPin,
   MessageCircle,
   Phone,
-  Search,
   Star,
-  X,
 } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect } from "react";
 import { useLocation } from "react-router";
 
 /* ------------------------------------------------------------------ */
@@ -35,13 +33,6 @@ import { useLocation } from "react-router";
 
 const BRIDGE_IMAGE =
   "https://images.unsplash.com/photo-1502920917128-1aa500764cbd?q=80&w=2400&auto=format&fit=crop";
-
-const STATS = [
-  { value: "12+", label: "Years guiding Batam" },
-  { value: "10,000+", label: "Travelers hosted" },
-  { value: "30+", label: "Tours & experiences" },
-  { value: "4.9/5", label: "Average rating" },
-];
 
 const FEATURES = [
   {
@@ -201,7 +192,7 @@ function Hero() {
         />
         <div className="absolute inset-0 bg-linear-to-b from-black/75 via-black/45 to-black/70" />
 
-        <div className="relative mx-auto flex min-h-[560px] w-full max-w-6xl flex-col justify-center px-4 pb-20 pt-12 sm:px-6 lg:min-h-[600px]">
+        <div className="relative mx-auto flex min-h-[560px] w-full max-w-6xl flex-col justify-center px-4 pb-16 pt-12 sm:px-6 lg:min-h-[600px]">
           <div className="max-w-2xl">
             <Reveal>
               <Badge className="gap-1.5 rounded-full border border-white/25 bg-white/10 px-3 py-1 text-xs font-medium text-white backdrop-blur-sm">
@@ -273,27 +264,6 @@ function Hero() {
           </div>
         </div>
       </div>
-
-      {/* Stats strip */}
-      <div className="mx-auto w-full max-w-6xl px-4 sm:px-6">
-        <Reveal delay={0.1}>
-          <div className="-mt-10 grid grid-cols-2 gap-px overflow-hidden rounded-2xl border bg-border shadow-sm md:grid-cols-4">
-            {STATS.map((stat) => (
-              <div
-                key={stat.label}
-                className="flex flex-col items-center gap-1 bg-card px-4 py-6 text-center"
-              >
-                <span className="text-2xl font-bold tracking-tight sm:text-3xl">
-                  {stat.value}
-                </span>
-                <span className="text-xs font-medium text-muted-foreground sm:text-sm">
-                  {stat.label}
-                </span>
-              </div>
-            ))}
-          </div>
-        </Reveal>
-      </div>
     </section>
   );
 }
@@ -330,18 +300,7 @@ function Gallery({ tours }: { tours?: Doc<"tours">[] }) {
     <section id="gallery" className="scroll-mt-24 py-20 lg:py-24">
       <div className="mx-auto w-full max-w-6xl px-4 sm:px-6">
         <Reveal>
-          <div className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
-            <SectionHeader
-              eyebrow="gallery"
-              title="Gallery"
-              copy="The three most-booked experiences in the catalog right now."
-            />
-            <Button asChild variant="outline" className="w-fit rounded-full">
-              <a href="#tours">
-                View all tours <ArrowRight />
-              </a>
-            </Button>
-          </div>
+          <SectionHeader eyebrow="gallery" title="Gallery" />
         </Reveal>
         <div className="mt-10">
           {tours === undefined ? (
@@ -350,7 +309,23 @@ function Gallery({ tours }: { tours?: Doc<"tours">[] }) {
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {featured.map((tour, i) => (
                 <Reveal key={tour._id} delay={i * 0.06} className="h-full">
-                  <TourCard tour={tour} />
+                  <TourDialog
+                    tour={tour}
+                    trigger={
+                      <button
+                        type="button"
+                        aria-label={`View ${tour.name}`}
+                        className="group relative block aspect-[4/3] w-full cursor-pointer overflow-hidden rounded-2xl border border-border/70 bg-muted shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+                      >
+                        <img
+                          src={tour.imageUrl}
+                          alt={tour.name}
+                          loading="lazy"
+                          className="size-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
+                        />
+                      </button>
+                    }
+                  />
                 </Reveal>
               ))}
             </div>
@@ -362,32 +337,6 @@ function Gallery({ tours }: { tours?: Doc<"tours">[] }) {
 }
 
 function BrowseTours({ tours }: { tours?: Doc<"tours">[] }) {
-  const categories = useMemo(
-    () => Array.from(new Set((tours ?? []).map((tour) => tour.category))),
-    [tours],
-  );
-  const [active, setActive] = useState("all");
-  const [query, setQuery] = useState("");
-
-  const normalized = query.trim().toLowerCase();
-  const visible = useMemo(
-    () =>
-      (tours ?? []).filter(
-        (tour) =>
-          (active === "all" || tour.category === active) &&
-          (normalized.length === 0 ||
-            [tour.name, tour.tagline, tour.location, tour.category].some(
-              (field) => field.toLowerCase().includes(normalized),
-            )),
-      ),
-    [tours, active, normalized],
-  );
-
-  const resetFilters = () => {
-    setActive("all");
-    setQuery("");
-  };
-
   return (
     <section id="tours" className="scroll-mt-24 bg-muted/50 py-20 lg:py-24">
       <div className="mx-auto w-full max-w-6xl px-4 sm:px-6">
@@ -395,121 +344,25 @@ function BrowseTours({ tours }: { tours?: Doc<"tours">[] }) {
           <SectionHeader
             eyebrow="catalog"
             title="Browse every tour we run"
-            copy="Search by name, place or vibe — or filter by category. Every package is private, guided and priced per person."
+            copy="Every package is private, guided and priced per person."
           />
         </Reveal>
 
-        <Reveal delay={0.05}>
-          <div className="mt-8 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-            <div className="relative w-full max-w-md">
-              <Search className="absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
-              <Input
-                type="search"
-                value={query}
-                onChange={(event) => setQuery(event.target.value)}
-                placeholder="Try “bridge”, “beach” or “night market”…"
-                aria-label="Search tours"
-                className="h-11 rounded-full border-border bg-card pl-10 pr-10 shadow-sm"
-              />
-              {query.length > 0 && (
-                <button
-                  type="button"
-                  onClick={() => setQuery("")}
-                  aria-label="Clear search"
-                  className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full p-1 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
-                >
-                  <X className="size-4" />
-                </button>
-              )}
-            </div>
-
-            <div className="flex flex-wrap items-center gap-2">
-              <button
-                type="button"
-                onClick={() => setActive("all")}
-                aria-pressed={active === "all"}
-                className={cn(
-                  "rounded-full border px-4 py-2 text-sm font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
-                  active === "all"
-                    ? "border-transparent bg-primary text-primary-foreground shadow-sm"
-                    : "border-border bg-card text-muted-foreground hover:border-border hover:bg-accent hover:text-foreground",
-                )}
-              >
-                All tours
-                <span className="ml-1.5 text-xs opacity-70">
-                  {tours?.length ?? 0}
-                </span>
-              </button>
-              {categories.map((category) => (
-                <button
-                  key={category}
-                  type="button"
-                  onClick={() => setActive(category)}
-                  aria-pressed={active === category}
-                  className={cn(
-                    "rounded-full border px-4 py-2 text-sm font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
-                    active === category
-                      ? "border-transparent bg-primary text-primary-foreground shadow-sm"
-                      : "border-border bg-card text-muted-foreground hover:border-border hover:bg-accent hover:text-foreground",
-                  )}
-                >
-                  {category}
-                  <span className="ml-1.5 text-xs opacity-70">
-                    {
-                      (tours ?? []).filter(
-                        (tour) => tour.category === category,
-                      ).length
-                    }
-                  </span>
-                </button>
-              ))}
-            </div>
-          </div>
-        </Reveal>
-
-        <p
-          className="mt-5 font-mono text-xs text-muted-foreground"
-          aria-live="polite"
-        >
-          {tours !== undefined &&
-            `${visible.length} tour${visible.length === 1 ? "" : "s"}${
-              normalized.length > 0
-                ? ` · matching “${query.trim()}”`
-                : active === "all"
-                  ? " · all categories"
-                  : ` · ${active}`
-            }`}
-        </p>
-
-        <div className="mt-6">
+        <div className="mt-10">
           {tours === undefined ? (
             <TourGridSkeleton />
-          ) : visible.length === 0 ? (
-            <div className="flex flex-col items-center gap-4 rounded-2xl border border-dashed bg-card px-6 py-16 text-center">
-              <span className="flex size-12 items-center justify-center rounded-xl bg-muted text-muted-foreground">
-                <Search className="size-6" />
-              </span>
-              <div>
-                <p className="text-base font-semibold tracking-tight">
-                  No tours found
-                </p>
-                <p className="mt-1 text-sm text-muted-foreground">
-                  Nothing matches that search — try another keyword, or clear
-                  the filters.
-                </p>
-              </div>
-              <Button
-                variant="outline"
-                size="sm"
-                className="rounded-full"
-                onClick={resetFilters}
-              >
-                Clear search &amp; filters
-              </Button>
+          ) : tours.length === 0 ? (
+            <div className="flex flex-col items-center gap-3 rounded-2xl border border-dashed bg-card px-6 py-16 text-center">
+              <p className="text-base font-semibold tracking-tight">
+                No tours yet
+              </p>
+              <p className="text-sm text-muted-foreground">
+                Check back soon — new packages are on the way.
+              </p>
             </div>
           ) : (
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {visible.map((tour, i) => (
+              {tours.map((tour, i) => (
                 <Reveal key={tour._id} delay={(i % 3) * 0.06} className="h-full">
                   <TourCard tour={tour} />
                 </Reveal>
