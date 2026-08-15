@@ -353,12 +353,12 @@ function WhyZiTour() {
         </Reveal>
         <div className="mt-12 grid items-stretch gap-6 lg:grid-cols-[1.05fr_1fr]">
           <Reveal className="h-full">
-            <div className="relative h-full min-h-[320px] overflow-hidden rounded-3xl border border-border/70 shadow-sm">
+            <div className="relative flex h-full min-h-[320px] items-center justify-center overflow-hidden rounded-3xl border border-border/70 bg-muted/40 shadow-sm">
               <img
                 src={DRIVER_IMAGE}
                 alt="Zi Tour driver at the wheel of a private car in Batam"
                 loading="lazy"
-                className="absolute inset-0 size-full object-cover"
+                className="h-full w-auto object-contain"
               />
             </div>
           </Reveal>
