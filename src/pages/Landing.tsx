@@ -6,9 +6,8 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteNav } from "@/components/SiteNav";
 import { TourCard } from "@/components/tours/TourCard";
-import { TourDialog } from "@/components/tours/TourDialog";
 import { WhatsAppButton } from "@/components/WhatsAppButton";
-import { cn } from "@/lib/utils";
+import { cn, formatIDR } from "@/lib/utils";
 import { CONTACT, MAPS_EMBED_URL, MAPS_LINK, waLink } from "@/lib/site";
 import { useMutation, useQuery } from "convex/react";
 import { motion } from "framer-motion";
@@ -39,11 +38,6 @@ const FEATURES = [
     icon: Compass,
     title: "Local guides",
     copy: "Real Batam locals who know every shortcut, stall and photo spot worth stopping for.",
-  },
-  {
-    icon: CarFront,
-    title: "Private & flexible",
-    copy: "Your own car, your own pace. Swap stops, linger longer, or add one on the fly.",
   },
   {
     icon: BadgePercent,
@@ -78,29 +72,17 @@ const STEPS = [
   },
 ];
 
-const REVIEWS = [
-  {
-    initials: "SL",
-    name: "Sarah Lim",
-    origin: "Singapore",
-    quote:
-      "Booking took two minutes on WhatsApp and our guide was waiting at the hotel on time. The temple tour was the highlight of our Batam trip.",
-  },
-  {
-    initials: "BS",
-    name: "Budi Santoso",
-    origin: "Jakarta",
-    quote:
-      "We took the Barelang bridge drive with the kids — private car, patient driver, great photo stops. Exactly what we wanted, zero hassle.",
-  },
-  {
-    initials: "MC",
-    name: "Mei Chen",
-    origin: "Kuala Lumpur",
-    quote:
-      "The Nongsa water sports day was flawless: gear, lunch, transfers, all organized. We're already planning Pulau Abang next.",
-  },
+/** Daily rates (private car with driver). */
+const FLEET = [
+  { name: "Toyota Avanza All New", idr: 400000, rm: 115, sgd: 34 },
+  { name: "Toyota Terios", idr: 450000, rm: 130, sgd: 39 },
+  { name: "Daihatsu Xenia", idr: 400000, rm: 115, sgd: 34 },
+  { name: "Toyota Innova", idr: 600000, rm: 175, sgd: 52 },
+  { name: "Toyota Zenix", idr: 750000, rm: 220, sgd: 65 },
 ];
+
+const BOOKING_CAR_MESSAGE =
+  "Halo Zi Tour Travel Batam, saya ingin booking mobil 6 seater untuk tour di Batam. Mohon info ketersediaan dan harga untuk tanggal [isi tanggal]. Terima kasih";
 
 const AVATAR_TINTS = [
   "bg-primary text-primary-foreground",
@@ -309,23 +291,14 @@ function Gallery({ tours }: { tours?: Doc<"tours">[] }) {
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {featured.map((tour, i) => (
                 <Reveal key={tour._id} delay={i * 0.06} className="h-full">
-                  <TourDialog
-                    tour={tour}
-                    trigger={
-                      <button
-                        type="button"
-                        aria-label={`View ${tour.name}`}
-                        className="group relative block aspect-[4/3] w-full cursor-pointer overflow-hidden rounded-2xl border border-border/70 bg-muted shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
-                      >
-                        <img
-                          src={tour.imageUrl}
-                          alt={tour.name}
-                          loading="lazy"
-                          className="size-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
-                        />
-                      </button>
-                    }
-                  />
+                  <div className="group aspect-[4/3] overflow-hidden rounded-2xl border border-border/70 bg-muted shadow-sm">
+                    <img
+                      src={tour.imageUrl}
+                      alt={tour.name}
+                      loading="lazy"
+                      className="size-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
+                    />
+                  </div>
                 </Reveal>
               ))}
             </div>
@@ -387,11 +360,11 @@ function WhyZiTour() {
           <SectionHeader
             eyebrow="why us"
             title="A local team that treats your day like their own"
-            copy="Four reasons travelers keep coming back to Zi Tour."
+            copy="Three reasons travelers keep coming back to Zi Tour."
             center
           />
         </Reveal>
-        <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {FEATURES.map((feature, i) => (
             <Reveal key={feature.title} delay={i * 0.06} className="h-full">
               <div className="flex h-full flex-col gap-4 rounded-2xl border border-border/70 bg-card p-6 shadow-sm transition-shadow hover:shadow-md">
@@ -454,42 +427,78 @@ function HowItWorks() {
   );
 }
 
-function Reviews() {
+function Fleet() {
   return (
-    <section id="reviews" className="scroll-mt-24 py-20 lg:py-24">
+    <section id="armada" className="scroll-mt-24 py-20 lg:py-24">
       <div className="mx-auto w-full max-w-6xl px-4 sm:px-6">
         <Reveal>
           <SectionHeader
-            eyebrow="reviews"
-            title="Travelers who came, saw, and came back"
-            copy="Guests from Singapore, Malaysia and Indonesia, in their own words."
+            eyebrow="armada"
+            title="Armada Zi Tour Travel"
+            copy="Rent a car with a private driver for the day — fuel and pickup anywhere in Batam included. Rates shown per day."
+            center
           />
         </Reveal>
-        <div className="mt-12 grid gap-6 md:grid-cols-3">
-          {REVIEWS.map((review, i) => (
-            <Reveal key={review.name} delay={i * 0.08} className="h-full">
-              <figure className="flex h-full flex-col gap-4 rounded-2xl border border-border/70 bg-card p-6 shadow-sm">
-                <Stars />
-                <blockquote className="text-sm leading-6 text-muted-foreground">
-                  &ldquo;{review.quote}&rdquo;
-                </blockquote>
-                <figcaption className="mt-auto flex items-center gap-3 border-t pt-4">
-                  <span className="flex size-10 items-center justify-center rounded-full bg-primary/10 text-xs font-bold text-primary">
-                    {review.initials}
+        <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {FLEET.map((car, i) => (
+            <Reveal key={car.name} delay={i * 0.06} className="h-full">
+              <div className="flex h-full flex-col gap-5 rounded-2xl border border-border/70 bg-card p-6 shadow-sm transition-shadow hover:shadow-md">
+                <div className="flex items-center gap-3">
+                  <span className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                    <CarFront className="size-5" />
                   </span>
                   <div>
-                    <p className="text-sm font-semibold tracking-tight">
-                      {review.name}
-                    </p>
-                    <p className="text-xs text-muted-foreground">
-                      {review.origin}
+                    <h3 className="text-base font-semibold tracking-tight">
+                      {car.name}
+                    </h3>
+                    <p className="mt-0.5 text-xs text-muted-foreground">
+                      Private car with driver · per day
                     </p>
                   </div>
-                </figcaption>
-              </figure>
+                </div>
+                <div className="mt-auto grid grid-cols-3 gap-2 rounded-xl border bg-muted/50 p-3 text-center">
+                  <div>
+                    <p className="font-mono text-[10px] font-medium uppercase tracking-wider text-muted-foreground">
+                      IDR
+                    </p>
+                    <p className="mt-1 text-sm font-bold tracking-tight">
+                      {formatIDR(car.idr)}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="font-mono text-[10px] font-medium uppercase tracking-wider text-muted-foreground">
+                      RM
+                    </p>
+                    <p className="mt-1 text-sm font-bold tracking-tight">
+                      RM {car.rm}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="font-mono text-[10px] font-medium uppercase tracking-wider text-muted-foreground">
+                      SGD
+                    </p>
+                    <p className="mt-1 text-sm font-bold tracking-tight">
+                      SGD {car.sgd}
+                    </p>
+                  </div>
+                </div>
+              </div>
             </Reveal>
           ))}
         </div>
+        <Reveal delay={0.1}>
+          <div className="mt-10 flex justify-center">
+            <Button asChild size="lg" className="h-12 rounded-full px-8 text-sm">
+              <a
+                href={waLink(undefined, BOOKING_CAR_MESSAGE)}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <MessageCircle /> Booking car 6 seater
+              </a>
+            </Button>
+          </div>
+        </Reveal>
       </div>
     </section>
   );
@@ -641,7 +650,7 @@ export default function Landing() {
         <BrowseTours tours={tours} />
         <WhyZiTour />
         <HowItWorks />
-        <Reviews />
+        <Fleet />
         <Location />
         <CtaBand />
       </main>

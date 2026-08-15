@@ -29,14 +29,18 @@ export const MAPS_LINK = `https://www.google.com/maps/search/?api=1&query=${MAPS
 
 /**
  * Build a WhatsApp deep link with a pre-filled message.
- * Without a tour, uses the general inquiry message asking for available
- * packages, prices and the visit date.
+ * Pass a custom `message` to override the default texts entirely.
  */
-export function waLink(tour?: { name: string; price?: number }) {
-  const text = tour
-    ? `Halo Zi Tour Travel Batam, saya tertarik dengan paket tour "${tour.name}"${
-        tour.price ? ` (${formatIDR(tour.price)})` : ""
-      }. Mohon info ketersediaan untuk kunjungan pada tanggal [isi tanggal]? Terima kasih`
-    : "Halo Zi Tour Travel Batam, saya tertarik dengan paket tour Anda. Mohon info paket yang tersedia beserta harga, dan apakah tersedia untuk kunjungan pada tanggal [isi tanggal]? Terima kasih";
+export function waLink(
+  tour?: { name: string; price?: number },
+  message?: string,
+) {
+  const text =
+    message ??
+    (tour
+      ? `Halo Zi Tour Travel Batam, saya tertarik dengan paket tour "${tour.name}"${
+          tour.price ? ` (${formatIDR(tour.price)})` : ""
+        }. Mohon info ketersediaan untuk kunjungan pada tanggal [isi tanggal]? Terima kasih`
+      : "Halo Zi Tour Travel Batam, saya tertarik dengan paket tour Anda. Mohon info paket yang tersedia beserta harga, dan apakah tersedia untuk kunjungan pada tanggal [isi tanggal]? Terima kasih");
   return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`;
 }

@@ -17,7 +17,6 @@ const NAV_LINKS = [
   { label: "Tours", href: "/#tours" },
   { label: "Gallery", href: "/#gallery" },
   { label: "Why Zi Tour", href: "/#why" },
-  { label: "Reviews", href: "/#reviews" },
 ];
 
 export function SiteNav() {
