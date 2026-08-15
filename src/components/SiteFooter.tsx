@@ -93,7 +93,7 @@ export function SiteFooter() {
                   href="/#why"
                   className="transition-colors hover:text-foreground"
                 >
-                  Why Zi Tour
+                  Why Zi Tour Travel
                 </a>
               </li>
             </ul>
@@ -116,14 +116,6 @@ export function SiteFooter() {
                   className="transition-colors hover:text-foreground"
                 >
                   Contact us
-                </a>
-              </li>
-              <li>
-                <a
-                  href={`mailto:${CONTACT.email}`}
-                  className="transition-colors hover:text-foreground"
-                >
-                  {CONTACT.email}
                 </a>
               </li>
               <li>

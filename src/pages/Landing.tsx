@@ -22,6 +22,7 @@ import {
   MapPin,
   MessageCircle,
   Phone,
+  Users,
 } from "lucide-react";
 import { useEffect } from "react";
 import { useLocation } from "react-router";
@@ -246,6 +247,71 @@ function Hero() {
             </Reveal>
           </div>
         </div>
+      </div>
+    </section>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/* Driver                                                              */
+/* ------------------------------------------------------------------ */
+
+function DriverSection() {
+  return (
+    <section id="driver" className="scroll-mt-24 py-20 lg:py-24">
+      <div className="mx-auto w-full max-w-6xl px-4 sm:px-6">
+        <Reveal>
+          <SectionHeader
+            eyebrow="data diri"
+            title="Meet your driver"
+            copy="The person behind the wheel — your guide, your navigator, and your local friend in Batam."
+          />
+        </Reveal>
+        <Reveal delay={0.05}>
+          <div className="mt-10 grid items-center gap-8 lg:grid-cols-[0.85fr_1fr]">
+            <div className="mx-auto w-full max-w-sm">
+              <div className="aspect-square overflow-hidden rounded-3xl border border-border/70 shadow-sm">
+                <img
+                  src="/assets/data-diri.jpeg"
+                  alt="Zi Tour Travel driver"
+                  loading="lazy"
+                  className="size-full object-cover"
+                />
+              </div>
+            </div>
+            <div className="rounded-3xl border border-border/70 bg-card p-7 shadow-sm sm:p-8">
+              {/* TODO: replace with the driver's real name and details */}
+              <p className="font-mono text-xs font-medium uppercase tracking-[0.2em] text-primary">
+                <span className="text-primary/50">//&nbsp;</span>driver profile
+              </p>
+              <h3 className="mt-2 text-2xl font-bold tracking-tight">
+                Driver Zi Tour
+              </h3>
+              <p className="mt-1 text-sm text-muted-foreground">
+                Private driver &amp; local guide · Batam
+              </p>
+              <ul className="mt-6 space-y-3 text-sm text-muted-foreground">
+                <li className="flex items-center gap-2.5">
+                  <MapPin className="size-4 shrink-0 text-primary" />
+                  Based in Batam, Kepulauan Riau
+                </li>
+                <li className="flex items-center gap-2.5">
+                  <Users className="size-4 shrink-0 text-primary" />
+                  Speaks Indonesian &amp; Malay
+                </li>
+                <li className="flex items-center gap-2.5">
+                  <Phone className="size-4 shrink-0 text-primary" />
+                  {CONTACT.phone}
+                </li>
+              </ul>
+              <Button asChild className="mt-7 rounded-full">
+                <a href={waLink()} target="_blank" rel="noopener noreferrer">
+                  <MessageCircle /> Chat with your driver
+                </a>
+              </Button>
+            </div>
+          </div>
+        </Reveal>
       </div>
     </section>
   );
@@ -658,6 +724,7 @@ export default function Landing() {
       <SiteNav />
       <main>
         <Hero />
+        <DriverSection />
         <Fleet />
         <Gallery />
         <BrowseTours tours={tours} />
