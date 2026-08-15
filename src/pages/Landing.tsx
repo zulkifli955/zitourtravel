@@ -360,17 +360,6 @@ function WhyZiTour() {
                 loading="lazy"
                 className="absolute inset-0 size-full object-cover"
               />
-              <div className="absolute inset-x-4 bottom-4">
-                <div className="rounded-2xl border border-white/15 bg-black/55 px-5 py-4 text-white backdrop-blur-sm">
-                  <p className="font-mono text-[11px] font-medium uppercase tracking-[0.2em] text-teal-300">
-                    // your private driver
-                  </p>
-                  <p className="mt-1 text-sm font-medium leading-6 text-white/90">
-                    Every tour comes with its own car and a driver who knows
-                    Batam like the back of their hand.
-                  </p>
-                </div>
-              </div>
             </div>
           </Reveal>
           <div className="flex flex-col gap-6">

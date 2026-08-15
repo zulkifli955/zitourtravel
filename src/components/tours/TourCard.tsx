@@ -23,9 +23,6 @@ export function TourCard({ tour }: { tour: Doc<"tours"> }) {
               className="size-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
             />
             <div className="absolute inset-0 bg-black/0 transition-colors duration-300 group-hover:bg-black/10" />
-            <Badge className="absolute left-4 top-4 border-0 bg-card/90 text-foreground shadow-sm backdrop-blur-sm">
-              {tour.category}
-            </Badge>
             {tour.featured && (
               <Badge className="absolute right-4 top-4 border-0 bg-primary text-primary-foreground shadow-sm">
                 <Sparkles className="size-3" /> Featured
