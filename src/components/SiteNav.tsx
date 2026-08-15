@@ -16,7 +16,7 @@ import { Link } from "react-router";
 const NAV_LINKS = [
   { label: "Tours", href: "/#tours" },
   { label: "Gallery", href: "/#gallery" },
-  { label: "Why Zi Tour", href: "/#why" },
+  { label: "Why Zi Tour Travel", href: "/#why" },
 ];
 
 export function SiteNav() {

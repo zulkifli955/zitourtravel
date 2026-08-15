@@ -28,7 +28,7 @@ export function SiteFooter() {
   return (
     <footer id="contact" className="scroll-mt-24 border-t bg-card">
       <div className="mx-auto w-full max-w-6xl px-4 py-14 sm:px-6">
-        <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-3">
           <div>
             <a href="/" className="flex items-center gap-2.5">
               <span className="flex size-9 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-sm">
@@ -94,36 +94,6 @@ export function SiteFooter() {
                   className="transition-colors hover:text-foreground"
                 >
                   Why Zi Tour Travel
-                </a>
-              </li>
-            </ul>
-          </div>
-
-          <div>
-            <h3 className="text-sm font-semibold tracking-tight">Company</h3>
-            <ul className="mt-4 space-y-3 text-sm text-muted-foreground">
-              <li>
-                <a
-                  href="/#how"
-                  className="transition-colors hover:text-foreground"
-                >
-                  How it works
-                </a>
-              </li>
-              <li>
-                <a
-                  href="/#contact"
-                  className="transition-colors hover:text-foreground"
-                >
-                  Contact us
-                </a>
-              </li>
-              <li>
-                <a
-                  href={`tel:${CONTACT.phone.replace(/[^+\d]/g, "")}`}
-                  className="transition-colors hover:text-foreground"
-                >
-                  {CONTACT.phone}
                 </a>
               </li>
             </ul>

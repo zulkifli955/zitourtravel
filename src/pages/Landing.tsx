@@ -98,7 +98,7 @@ const FLEET = [
   },
   {
     name: "Toyota Terios",
-    image: "/assets/Terios.webp",
+    image: "/assets/Terios-red.webp",
     idr: 450000,
     rm: 130,
     sgd: 39,
@@ -113,6 +113,7 @@ const FLEET = [
   {
     name: "Toyota Innova",
     image: "/assets/Innova.webp",
+    aspect: "aspect-[4/5]",
     idr: 600000,
     rm: 175,
     sgd: 52,
@@ -123,6 +124,15 @@ const FLEET = [
     idr: 750000,
     rm: 220,
     sgd: 65,
+  },
+  {
+    name: "Toyota Hiace",
+    image:
+      "/assets/WhatsApp_Image_2026-08-11_at_14.07.11.jpeg",
+    aspect: "aspect-[3/4]",
+    idr: 900000,
+    rm: 260,
+    sgd: 77,
   },
 ];
 
@@ -285,7 +295,7 @@ function DriverSection() {
                 <span className="text-primary/50">//&nbsp;</span>driver profile
               </p>
               <h3 className="mt-2 text-2xl font-bold tracking-tight">
-                Driver Zi Tour
+                Zi Tour Travel
               </h3>
               <p className="mt-1 text-sm text-muted-foreground">
                 Private driver &amp; local guide · Batam
@@ -297,7 +307,7 @@ function DriverSection() {
                 </li>
                 <li className="flex items-center gap-2.5">
                   <Users className="size-4 shrink-0 text-primary" />
-                  Speaks Indonesian &amp; Malay
+                  Speaks Indonesian, Malay &amp; English
                 </li>
                 <li className="flex items-center gap-2.5">
                   <Phone className="size-4 shrink-0 text-primary" />
@@ -508,7 +518,12 @@ function Fleet() {
           {FLEET.map((car, i) => (
             <Reveal key={car.name} delay={i * 0.06} className="h-full">
               <div className="flex h-full flex-col gap-5 overflow-hidden rounded-2xl border border-border/70 bg-card p-0 shadow-sm transition-shadow hover:shadow-md">
-                <div className="aspect-[16/10] shrink-0 overflow-hidden bg-muted">
+                <div
+                  className={cn(
+                    "aspect-[16/10] shrink-0 overflow-hidden bg-muted",
+                    car.aspect,
+                  )}
+                >
                   <img
                     src={car.image}
                     alt={car.name}
