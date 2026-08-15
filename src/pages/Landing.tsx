@@ -30,7 +30,7 @@ import { useLocation } from "react-router";
 /* Data                                                                */
 /* ------------------------------------------------------------------ */
 
-const BRIDGE_IMAGE = "/assets/hero.webp";
+const BRIDGE_IMAGE = "/assets/download.jpg";
 
 const DRIVER_IMAGE = "/assets/10.webp";
 
@@ -283,13 +283,12 @@ function Gallery() {
         <Reveal>
           <SectionHeader eyebrow="gallery" title="Gallery" />
         </Reveal>
-        <div className="mx-auto mt-10 max-w-4xl">
+        <div className="mx-auto mt-10 max-w-sm sm:max-w-md">
           <Reveal>
             <PhotoCarousel
               photos={GALLERY_PHOTOS}
               alt="Batam destinations"
-              itemClassName="h-[52vh] max-h-[560px] min-h-[320px] rounded-3xl border border-border/60 bg-muted/40 shadow-sm"
-              imgClassName="size-full object-contain"
+              itemClassName="aspect-[3/4] rounded-3xl border border-border/60 shadow-sm"
             />
           </Reveal>
         </div>
