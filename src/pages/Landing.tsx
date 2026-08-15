@@ -46,6 +46,7 @@ const GALLERY_PHOTOS = [
   "/assets/8.jpeg",
   "/assets/9.jpeg",
   "/assets/10.webp",
+  "/assets/WhatsApp_Image_2026-08-11_at_14.07.11.jpeg",
 ];
 
 const FEATURES = [
@@ -98,7 +99,7 @@ const FLEET = [
   },
   {
     name: "Toyota Terios",
-    image: "/assets/Terios-red.webp",
+    image: "/assets/terios.jpg",
     idr: 450000,
     rm: 130,
     sgd: 39,
@@ -113,7 +114,6 @@ const FLEET = [
   {
     name: "Toyota Innova",
     image: "/assets/Innova.webp",
-    aspect: "aspect-[4/5]",
     idr: 600000,
     rm: 175,
     sgd: 52,
@@ -127,9 +127,7 @@ const FLEET = [
   },
   {
     name: "Toyota Hiace",
-    image:
-      "/assets/WhatsApp_Image_2026-08-11_at_14.07.11.jpeg",
-    aspect: "aspect-[3/4]",
+    image: "/assets/Hiace.webp",
     idr: 900000,
     rm: 260,
     sgd: 77,
@@ -518,12 +516,7 @@ function Fleet() {
           {FLEET.map((car, i) => (
             <Reveal key={car.name} delay={i * 0.06} className="h-full">
               <div className="flex h-full flex-col gap-5 overflow-hidden rounded-2xl border border-border/70 bg-card p-0 shadow-sm transition-shadow hover:shadow-md">
-                <div
-                  className={cn(
-                    "aspect-[16/10] shrink-0 overflow-hidden bg-muted",
-                    car.aspect,
-                  )}
-                >
+                <div className="aspect-[16/10] shrink-0 overflow-hidden bg-muted">
                   <img
                     src={car.image}
                     alt={car.name}
