@@ -81,8 +81,10 @@ const FLEET = [
   { name: "Toyota Zenix", idr: 750000, rm: 220, sgd: 65 },
 ];
 
-const BOOKING_CAR_MESSAGE =
-  "Halo Zi Tour Travel Batam, saya ingin booking mobil 6 seater untuk tour di Batam. Mohon info ketersediaan dan harga untuk tanggal [isi tanggal]. Terima kasih";
+const bookingMessage = (car: (typeof FLEET)[number]) =>
+  `Halo Zi Tour Travel Batam, saya ingin booking mobil ${car.name} (${formatIDR(
+    car.idr,
+  )} per hari). Mohon info ketersediaan untuk tanggal [isi tanggal]. Terima kasih`;
 
 const AVATAR_TINTS = [
   "bg-primary text-primary-foreground",
@@ -429,7 +431,7 @@ function HowItWorks() {
 
 function Fleet() {
   return (
-    <section id="armada" className="scroll-mt-24 py-20 lg:py-24">
+    <section id="armada" className="scroll-mt-24 bg-muted/50 py-20 lg:py-24">
       <div className="mx-auto w-full max-w-6xl px-4 sm:px-6">
         <Reveal>
           <SectionHeader
@@ -456,49 +458,52 @@ function Fleet() {
                     </p>
                   </div>
                 </div>
-                <div className="mt-auto grid grid-cols-3 gap-2 rounded-xl border bg-muted/50 p-3 text-center">
-                  <div>
-                    <p className="font-mono text-[10px] font-medium uppercase tracking-wider text-muted-foreground">
-                      IDR
-                    </p>
-                    <p className="mt-1 text-sm font-bold tracking-tight">
-                      {formatIDR(car.idr)}
-                    </p>
+                <div className="mt-auto">
+                  <div className="grid grid-cols-3 gap-2 rounded-xl border bg-muted/50 p-3 text-center">
+                    <div>
+                      <p className="font-mono text-[10px] font-medium uppercase tracking-wider text-muted-foreground">
+                        IDR
+                      </p>
+                      <p className="mt-1 text-sm font-bold tracking-tight">
+                        {formatIDR(car.idr)}
+                      </p>
+                    </div>
+                    <div>
+                      <p className="font-mono text-[10px] font-medium uppercase tracking-wider text-muted-foreground">
+                        RM
+                      </p>
+                      <p className="mt-1 text-sm font-bold tracking-tight">
+                        RM {car.rm}
+                      </p>
+                    </div>
+                    <div>
+                      <p className="font-mono text-[10px] font-medium uppercase tracking-wider text-muted-foreground">
+                        SGD
+                      </p>
+                      <p className="mt-1 text-sm font-bold tracking-tight">
+                        SGD {car.sgd}
+                      </p>
+                    </div>
                   </div>
-                  <div>
-                    <p className="font-mono text-[10px] font-medium uppercase tracking-wider text-muted-foreground">
-                      RM
-                    </p>
-                    <p className="mt-1 text-sm font-bold tracking-tight">
-                      RM {car.rm}
-                    </p>
-                  </div>
-                  <div>
-                    <p className="font-mono text-[10px] font-medium uppercase tracking-wider text-muted-foreground">
-                      SGD
-                    </p>
-                    <p className="mt-1 text-sm font-bold tracking-tight">
-                      SGD {car.sgd}
-                    </p>
-                  </div>
+                  <Button
+                    asChild
+                    variant="outline"
+                    size="sm"
+                    className="mt-3 w-full rounded-full"
+                  >
+                    <a
+                      href={waLink(undefined, bookingMessage(car))}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <MessageCircle className="size-4" /> Booking
+                    </a>
+                  </Button>
                 </div>
               </div>
             </Reveal>
           ))}
         </div>
-        <Reveal delay={0.1}>
-          <div className="mt-10 flex justify-center">
-            <Button asChild size="lg" className="h-12 rounded-full px-8 text-sm">
-              <a
-                href={waLink(undefined, BOOKING_CAR_MESSAGE)}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <MessageCircle /> Booking car 6 seater
-              </a>
-            </Button>
-          </div>
-        </Reveal>
       </div>
     </section>
   );
@@ -623,9 +628,14 @@ export default function Landing() {
   const seedTours = useMutation(api.tours.seed);
   const location = useLocation();
 
-  // Seed the catalog on first load so the site works in any environment.
+  // Seed the catalog (and backfill new fields) so the site works in any
+  // environment, including on data seeded before newer fields existed.
   useEffect(() => {
-    if (tours !== undefined && tours.length === 0) {
+    if (
+      tours !== undefined &&
+      (tours.length === 0 ||
+        tours.some((tour) => !tour.gallery || tour.gallery.length === 0))
+    ) {
       void seedTours();
     }
   }, [tours, seedTours]);
@@ -646,6 +656,7 @@ export default function Landing() {
       <SiteNav />
       <main>
         <Hero />
+        <Fleet />
         <Gallery tours={tours} />
         <BrowseTours tours={tours} />
         <WhyZiTour />

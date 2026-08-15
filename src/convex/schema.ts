@@ -40,7 +40,8 @@ const schema = defineSchema(
       tagline: v.string(), // one-line pitch shown on cards
       description: v.string(), // full description shown in the tour detail view
       category: v.string(), // browse filter, e.g. "City & Culture"
-      imageUrl: v.string(), // hero photo for the card / detail view
+      imageUrl: v.string(), // primary photo for the card
+      gallery: v.array(v.string()), // additional photos shown in the popup
       price: v.number(), // price in Indonesian Rupiah, per person
       durationHours: v.number(), // typical duration in hours
       location: v.string(), // area of Batam where the tour runs

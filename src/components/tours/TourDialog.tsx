@@ -10,21 +10,19 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import type { Doc } from "@/convex/_generated/dataModel";
-import { formatIDR } from "@/lib/utils";
-import { waLink } from "@/lib/site";
+import { cn } from "@/lib/utils";
 import {
   CalendarDays,
   Clock,
   MapPin,
-  MessageCircle,
   Star,
   X,
 } from "lucide-react";
+import { useState } from "react";
 
 /**
- * Popup with the tour's photo and the caption (description) of the
- * destination. Trigger is supplied by the caller so cards and gallery
- * images can both open it.
+ * Popup with the tour's photos and the caption (description) of the
+ * destination. Trigger is supplied by the caller so cards can open it.
  */
 export function TourDialog({
   tour,
@@ -33,6 +31,13 @@ export function TourDialog({
   tour: Doc<"tours">;
   trigger: React.ReactNode;
 }) {
+  // Newer tours carry a gallery; older ones fall back to the single photo.
+  const photos =
+    tour.gallery && tour.gallery.length > 0
+      ? tour.gallery
+      : [tour.imageUrl];
+  const [active, setActive] = useState(0);
+
   return (
     <Dialog>
       <DialogTrigger asChild>{trigger}</DialogTrigger>
@@ -40,10 +45,10 @@ export function TourDialog({
         showCloseButton={false}
         className="max-h-[90vh] flex-col gap-0 overflow-hidden p-0 sm:max-w-2xl"
       >
-        {/* Photo */}
+        {/* Main photo */}
         <div className="relative aspect-[16/9] shrink-0 bg-muted">
           <img
-            src={tour.imageUrl}
+            src={photos[active]}
             alt={tour.name}
             className="size-full object-cover"
           />
@@ -68,6 +73,33 @@ export function TourDialog({
             </Button>
           </DialogClose>
         </div>
+
+        {/* Photo thumbnails */}
+        {photos.length > 1 && (
+          <div className="flex shrink-0 gap-2 overflow-x-auto px-6 pb-1 pt-4">
+            {photos.map((src, index) => (
+              <button
+                key={src}
+                type="button"
+                onClick={() => setActive(index)}
+                aria-label={`Show photo ${index + 1} of ${photos.length}`}
+                aria-pressed={index === active}
+                className={cn(
+                  "h-16 w-24 shrink-0 cursor-pointer overflow-hidden rounded-lg border-2 transition-all focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
+                  index === active
+                    ? "border-primary"
+                    : "border-transparent opacity-60 hover:opacity-100",
+                )}
+              >
+                <img
+                  src={src}
+                  alt={`${tour.name} photo ${index + 1}`}
+                  className="size-full object-cover"
+                />
+              </button>
+            ))}
+          </div>
+        )}
 
         {/* Caption of the destination */}
         <div className="flex flex-col gap-5 overflow-y-auto p-6 sm:p-7">
@@ -97,30 +129,6 @@ export function TourDialog({
 
           <p className="text-sm leading-7 text-muted-foreground sm:text-base sm:leading-8">
             {tour.description}
-          </p>
-
-          <div className="flex flex-col gap-5 border-t pt-5 sm:flex-row sm:items-center sm:justify-between">
-            <div>
-              <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
-                Price per person
-              </p>
-              <p className="mt-1 text-2xl font-bold tracking-tight">
-                {formatIDR(tour.price)}
-              </p>
-            </div>
-            <Button asChild className="h-11 rounded-full px-6">
-              <a
-                href={waLink(tour)}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <MessageCircle /> Book on WhatsApp
-              </a>
-            </Button>
-          </div>
-
-          <p className="text-xs leading-5 text-muted-foreground">
-            Pay on arrival · Free cancellation up to 24 hours before the tour.
           </p>
         </div>
       </DialogContent>

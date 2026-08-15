@@ -34,20 +34,30 @@ export const getBySlug = query({
 });
 
 /**
- * Idempotent seed for the tours catalog. Only inserts when the table is
- * empty, so it is safe to call from the client on first load.
+ * Idempotent seed for the tours catalog. Inserts missing tours and
+ * backfills new fields (e.g. gallery) onto older rows, so it is safe to
+ * call from the client on every load.
  */
 export const seed = mutation({
   args: {},
   handler: async (ctx) => {
-    const existing = await ctx.db.query("tours").first();
-    if (existing) {
-      return { seeded: 0 };
-    }
+    let seeded = 0;
     for (const tour of SEED_TOURS) {
+      const existing = await ctx.db
+        .query("tours")
+        .withIndex("by_slug", (q) => q.eq("slug", tour.slug))
+        .first();
+      if (existing) {
+        // Backfill fields added after the row was first created.
+        if (!existing.gallery || existing.gallery.length === 0) {
+          await ctx.db.patch(existing._id, { gallery: tour.gallery });
+        }
+        continue;
+      }
       await ctx.db.insert("tours", tour);
+      seeded += 1;
     }
-    return { seeded: SEED_TOURS.length };
+    return { seeded };
   },
 });
 
@@ -63,6 +73,11 @@ const SEED_TOURS = [
       "Spend a day exploring Batam's most storied landmarks with a local guide: the vast Maha Vihara Duta Maitreya temple, the historic Tua Pek Kong shrine, and the miniature Indonesia park at Mega Legenda. Round-trip hotel pickup and a private car keep the pace yours.",
     category: "City & Culture",
     imageUrl: img("photo-1564507592333-c60657eea523"),
+    gallery: [
+      img("photo-1564507592333-c60657eea523"),
+      img("photo-1566837945700-30057527ade0"),
+      img("photo-1477959858617-67f85cf4f1df"),
+    ],
     price: 350000,
     durationHours: 6,
     location: "Batam Centre",
@@ -93,6 +108,11 @@ const SEED_TOURS = [
       "Cross the iconic Barelang bridge chain that links Batam to its southern islets, stop at the famous viewpoint over the Riau Strait, and end at a breezy coastal café. The classic Batam postcard, minus the planning.",
     category: "City & Culture",
     imageUrl: img("photo-1502920917128-1aa500764cbd"),
+    gallery: [
+      img("photo-1502920917128-1aa500764cbd"),
+      img("photo-1519452575417-564c1401ecc0"),
+      img("photo-1506929562872-bb421503ef21"),
+    ],
     price: 300000,
     durationHours: 5,
     location: "Barelang",
@@ -122,6 +142,11 @@ const SEED_TOURS = [
       "A full day at Nongsa's white-sand coast with time on the water: choose jet-skiing, banana boats or simply a sun lounger with a cold drink. Lunch at a beachfront restaurant overlooking the Singapore skyline.",
     category: "Island & Beach",
     imageUrl: img("photo-1544551763-46a013bb70d5"),
+    gallery: [
+      img("photo-1544551763-46a013bb70d5"),
+      img("photo-1519046904884-53103b34b206"),
+      img("photo-1540541338287-41700207dee6"),
+    ],
     price: 450000,
     durationHours: 7,
     location: "Nongsa",
@@ -152,6 +177,11 @@ const SEED_TOURS = [
       "Take a fast boat from Batam's east coast to the quiet islets off Pulau Abang. Snorkel coral gardens, wade on sandbanks, and sit down to a grilled seafood lunch cooked on the beach.",
     category: "Island & Beach",
     imageUrl: img("photo-1530521954074-e64f6810b32d"),
+    gallery: [
+      img("photo-1530521954074-e64f6810b32d"),
+      img("photo-1559827260-dc66d52bef19"),
+      img("photo-1500375592092-40eb2168fd21"),
+    ],
     price: 650000,
     durationHours: 10,
     location: "Pulau Abang",
@@ -182,6 +212,11 @@ const SEED_TOURS = [
       "When the sun goes down, Marina City comes alive. Wander the neon-lit market with your guide, snack on sate, nasi padang and durian treats, and browse duty-free shops on the way back.",
     category: "Food & Shopping",
     imageUrl: img("photo-1519677100203-a0e668c92439"),
+    gallery: [
+      img("photo-1519677100203-a0e668c92439"),
+      img("photo-1504674900247-0877df9cc836"),
+      img("photo-1555396273-367ea4eb4db5"),
+    ],
     price: 200000,
     durationHours: 4,
     location: "Marina City",
@@ -211,6 +246,11 @@ const SEED_TOURS = [
       "Cross the Barelang bridges to Galang Island, where a former Vietnamese refugee camp now stands as a moving museum. A thoughtful, guided half-day for history-minded travelers.",
     category: "City & Culture",
     imageUrl: img("photo-1519452575417-564c1401ecc0"),
+    gallery: [
+      img("photo-1519452575417-564c1401ecc0"),
+      img("photo-1571896349842-33c89424de2d"),
+      img("photo-1544551763-46a013bb70d5"),
+    ],
     price: 400000,
     durationHours: 8,
     location: "Galang Island",
@@ -241,6 +281,11 @@ const SEED_TOURS = [
       "A private shopping run with the places locals actually use: Kepri Mall, Grand Batam's outlet stores, and a coffee-and-snack pit stop. Plenty of boot space in the car for everything you pick up.",
     category: "Food & Shopping",
     imageUrl: img("photo-1441986300917-64674bd600d8"),
+    gallery: [
+      img("photo-1441986300917-64674bd600d8"),
+      img("photo-1519677100203-a0e668c92439"),
+      img("photo-1504674900247-0877df9cc836"),
+    ],
     price: 250000,
     durationHours: 5,
     location: "Batam Centre",
@@ -270,6 +315,11 @@ const SEED_TOURS = [
       "A gentle, family-friendly day in Batam's green belt: tour an aloe vera farm, taste tropical fruit straight from the tree, and meet friendly farm animals. Kids and grandparents included.",
     category: "Family Fun",
     imageUrl: img("photo-1500937386664-56d1dfef3854"),
+    gallery: [
+      img("photo-1500937386664-56d1dfef3854"),
+      img("photo-1466692476868-aef1dfb1e735"),
+      img("photo-1559827260-dc66d52bef19"),
+    ],
     price: 275000,
     durationHours: 5,
     location: "Sei Beduk",
@@ -300,6 +350,11 @@ const SEED_TOURS = [
       "Kayak through sheltered mangrove channels with a certified eco guide, spot monitor lizards and kingfishers, and finish with a coconut on a quiet boardwalk. Minimal effort, maximum calm.",
     category: "Adventure",
     imageUrl: img("photo-1476673160081-cf065607f449"),
+    gallery: [
+      img("photo-1476673160081-cf065607f449"),
+      img("photo-1500375592092-40eb2168fd21"),
+      img("photo-1530521954074-e64f6810b32d"),
+    ],
     price: 320000,
     durationHours: 4,
     location: "Nongsa",
