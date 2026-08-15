@@ -30,11 +30,9 @@ import { useLocation } from "react-router";
 /* Data                                                                */
 /* ------------------------------------------------------------------ */
 
-const BRIDGE_IMAGE =
-  "https://images.unsplash.com/photo-1502920917128-1aa500764cbd?q=80&w=2400&auto=format&fit=crop";
+const BRIDGE_IMAGE = "/assets/hero.webp";
 
-const DRIVER_IMAGE =
-  "https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?q=80&w=1600&auto=format&fit=crop";
+const DRIVER_IMAGE = "/assets/10.webp";
 
 const FEATURES = [
   {
@@ -75,44 +73,39 @@ const STEPS = [
   },
 ];
 
-/** Daily rates (private car with driver). TODO: replace with real fleet photos. */
+/** Daily rates (private car with driver). */
 const FLEET = [
   {
     name: "Toyota Avanza All New",
-    image:
-      "https://images.unsplash.com/photo-1541899481282-d53bffe3c35d?q=80&w=1200&auto=format&fit=crop",
+    image: "/assets/Avanza.webp",
     idr: 400000,
     rm: 115,
     sgd: 34,
   },
   {
     name: "Toyota Terios",
-    image:
-      "https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?q=80&w=1200&auto=format&fit=crop",
+    image: "/assets/Terios.webp",
     idr: 450000,
     rm: 130,
     sgd: 39,
   },
   {
     name: "Daihatsu Xenia",
-    image:
-      "https://images.unsplash.com/photo-1552519507-da3b142c6e3d?q=80&w=1200&auto=format&fit=crop",
+    image: "/assets/Xenia.webp",
     idr: 400000,
     rm: 115,
     sgd: 34,
   },
   {
     name: "Toyota Innova",
-    image:
-      "https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?q=80&w=1200&auto=format&fit=crop",
+    image: "/assets/Innova.webp",
     idr: 600000,
     rm: 175,
     sgd: 52,
   },
   {
     name: "Toyota Zenix",
-    image:
-      "https://images.unsplash.com/photo-1621007947382-bb3c3994e3fb?q=80&w=1200&auto=format&fit=crop",
+    image: "/assets/Zenix.webp",
     idr: 750000,
     rm: 220,
     sgd: 65,
