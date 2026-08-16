@@ -98,13 +98,6 @@ const FLEET = [
     sgd: 34,
   },
   {
-    name: "Toyota Terios",
-    image: "/assets/terios.jpg",
-    idr: 450000,
-    rm: 130,
-    sgd: 39,
-  },
-  {
     name: "Daihatsu Xenia",
     image: "/assets/Xenia.webp",
     idr: 400000,

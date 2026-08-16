@@ -8,7 +8,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { BRAND } from "@/lib/site";
-import { Compass, Menu } from "lucide-react";
+import { Menu } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router";
 
@@ -25,16 +25,16 @@ export function SiteNav() {
   return (
     <header className="fixed inset-x-0 top-0 z-40 border-b border-border/60 bg-background/85 backdrop-blur-md">
       <div className="mx-auto flex h-16 w-full max-w-6xl items-center justify-between px-4 sm:px-6">
-        <Link to="/" className="flex items-center gap-2.5">
-          <span className="flex size-9 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-sm">
-            <Compass className="size-5" />
-          </span>
-          <span className="text-lg font-bold tracking-tight">
-            Zi Tour
-            <span className="ml-1.5 font-medium text-muted-foreground">
-              Travel
-            </span>
-          </span>
+        <Link
+          to="/"
+          className="flex items-center"
+          aria-label="Zi Tour Travel — home"
+        >
+          <img
+            src="/assets/travel_logos_-_Made_with_PosterMyWall__1_.png"
+            alt="Zi Tour Travel logo"
+            className="h-11 w-auto object-contain"
+          />
         </Link>
 
         <nav className="hidden items-center gap-7 md:flex">
