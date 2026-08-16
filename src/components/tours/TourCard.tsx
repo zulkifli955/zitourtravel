@@ -38,7 +38,6 @@ export function TourCard({ tour }: { tour: Doc<"tours"> }) {
           <span className="font-semibold text-foreground">
             {tour.rating.toFixed(1)}
           </span>
-          <span>({tour.reviewCount})</span>
         </div>
 
         <h3 className="text-base font-semibold leading-snug tracking-tight">

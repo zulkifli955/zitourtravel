@@ -34,7 +34,7 @@ import { useLocation } from "react-router";
 const BRIDGE_IMAGE = "/assets/download.jpg";
 
 /** Number of packages in the seed catalog — used to trigger a re-seed. */
-const EXPECTED_TOUR_COUNT = 18;
+const EXPECTED_TOUR_COUNT = 27;
 
 const DRIVER_IMAGE = "/assets/10.webp";
 
@@ -704,8 +704,7 @@ export default function Landing() {
   useEffect(() => {
     if (
       tours !== undefined &&
-      (tours.length === 0 ||
-        tours.length < EXPECTED_TOUR_COUNT ||
+      (tours.length !== EXPECTED_TOUR_COUNT ||
         tours.some((tour) => !tour.gallery || tour.gallery.length === 0))
     ) {
       void seedTours();

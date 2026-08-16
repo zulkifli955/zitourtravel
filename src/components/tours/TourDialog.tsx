@@ -45,7 +45,7 @@ export function TourDialog({
               <div className="absolute inset-x-4 top-4 flex flex-wrap items-center gap-2.5">
                 <span className="inline-flex items-center gap-1.5 rounded-full bg-card/90 px-2.5 py-0.5 text-xs font-medium text-card-foreground shadow-sm backdrop-blur-sm">
                   <Star className="size-3.5 fill-amber-400 text-amber-400" />
-                  {tour.rating.toFixed(1)} ({tour.reviewCount})
+                  {tour.rating.toFixed(1)}
                 </span>
               </div>
             }
