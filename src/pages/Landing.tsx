@@ -34,7 +34,7 @@ import { useLocation } from "react-router";
 const BRIDGE_IMAGE = "/assets/download.jpg";
 
 /** Number of packages in the seed catalog — used to trigger a re-seed. */
-const EXPECTED_TOUR_COUNT = 15;
+const EXPECTED_TOUR_COUNT = 19;
 
 const DRIVER_IMAGE = "/assets/10.webp";
 
@@ -96,30 +96,30 @@ const FLEET = [
   {
     name: "Toyota Avanza All New",
     image: "/assets/Avanza.webp",
-    idr: 400000,
-    rm: 115,
-    sgd: 34,
+    idr: 650000,
+    rm: 150,
+    sgd: 50,
   },
   {
     name: "Daihatsu Xenia",
     image: "/assets/Xenia.webp",
-    idr: 400000,
-    rm: 115,
-    sgd: 34,
+    idr: 650000,
+    rm: 150,
+    sgd: 50,
   },
   {
     name: "Toyota Innova",
     image: "/assets/Innova.webp",
-    idr: 600000,
-    rm: 175,
-    sgd: 52,
+    idr: 1200000,
+    rm: 350,
+    sgd: 95,
   },
   {
     name: "Toyota Hiace",
     image: "/assets/Hiace.webp",
-    idr: 900000,
-    rm: 260,
-    sgd: 77,
+    idr: 1400000,
+    rm: 300,
+    sgd: 150,
   },
 ];
 

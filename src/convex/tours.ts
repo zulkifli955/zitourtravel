@@ -75,7 +75,7 @@ export const seed = mutation({
 const img = (id: string) =>
   `https://images.unsplash.com/${id}?q=80&w=1600&auto=format&fit=crop`;
 
-/** 15 attractions, sorted alphabetically by name. */
+/** 19 attractions, sorted alphabetically by name. */
 const SEED_TOURS = [
   {
     name: "Barelang Bridge",
@@ -214,6 +214,40 @@ const SEED_TOURS = [
     sortOrder: 4,
   },
   {
+    name: "Gocart",
+    slug: "gocart",
+    tagline: "Put your foot down on Batam's go-kart track — laps, helmets and bragging rights.",
+    description:
+      "Get behind the wheel at Batam's go-kart circuit: safety briefing, helmet on, and a few fast laps around the track. Perfect for families, friends and anyone with a need for speed.",
+    category: "Adventure",
+    imageUrl: img("photo-1547347298-4074fc3086f0"),
+    gallery: [
+      img("photo-1547347298-4074fc3086f0"),
+      img("photo-1511994298241-608e28f14fde"),
+      img("photo-1500375592092-40eb2168fd21"),
+    ],
+    price: 350000,
+    durationHours: 2,
+    location: "Batam",
+    rating: 4.6,
+    reviewCount: 96,
+    highlights: [
+      "Go-kart racing laps",
+      "Safety briefing & helmet",
+      "Karts for kids & adults",
+      "Race results & bragging rights",
+    ],
+    includes: [
+      "Kart rental & fuel",
+      "Helmet & safety gear",
+      "Race briefing",
+      "Hotel pickup & drop-off",
+    ],
+    availableDays: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+    featured: false,
+    sortOrder: 5,
+  },
+  {
     name: "Infinity Beach Club",
     slug: "infinity-beach-club",
     tagline: "An infinity pool that melts into the sea, plus beach service all day.",
@@ -245,7 +279,75 @@ const SEED_TOURS = [
     ],
     availableDays: ["Fri", "Sat", "Sun"],
     featured: false,
-    sortOrder: 5,
+    sortOrder: 6,
+  },
+  {
+    name: "Jet Ski Barelang/GP",
+    slug: "jet-ski-barelang-gp",
+    tagline: "Ride the waves beneath Barelang's bridges — jet ski thrills with sea views.",
+    description:
+      "Feel the spray on a jet ski session in the waters around Barelang: full safety gear, a quick lesson, then open throttle across the bay with the bridges as your backdrop.",
+    category: "Adventure",
+    imageUrl: img("photo-1502680390469-be75c86b636f"),
+    gallery: [
+      img("photo-1502680390469-be75c86b636f"),
+      img("photo-1506929562872-bb421503ef21"),
+      img("photo-1519452575417-564c1401ecc0"),
+    ],
+    price: 500000,
+    durationHours: 2,
+    location: "Barelang",
+    rating: 4.7,
+    reviewCount: 74,
+    highlights: [
+      "Jet ski session on the bay",
+      "Life jacket & safety briefing",
+      "Beginner lesson included",
+      "Barelang bridge views",
+    ],
+    includes: [
+      "Jet ski rental",
+      "Life jacket & safety gear",
+      "Instructor & briefing",
+      "Hotel pickup & drop-off",
+    ],
+    availableDays: ["Fri", "Sat", "Sun"],
+    featured: false,
+    sortOrder: 7,
+  },
+  {
+    name: "Kampung Sawah",
+    slug: "kampung-sawah",
+    tagline: "Green rice paddies, water buffalo and village calm just outside the city.",
+    description:
+      "Kampung Sawah is Batam's slice of countryside: terraced paddies, water buffalo, and friendly farmers who'll show you how rice goes from field to plate.",
+    category: "Family Fun",
+    imageUrl: img("photo-1500937386664-56d1dfef3854"),
+    gallery: [
+      img("photo-1500937386664-56d1dfef3854"),
+      img("photo-1466692476868-aef1dfb1e735"),
+      img("photo-1500375592092-40eb2168fd21"),
+    ],
+    price: 250000,
+    durationHours: 4,
+    location: "Sekupang",
+    rating: 4.7,
+    reviewCount: 74,
+    highlights: [
+      "Rice-paddy walk",
+      "Water buffalo sightings",
+      "Farmer meet & greet",
+      "Local snack break",
+    ],
+    includes: [
+      "Village guide",
+      "Local snack",
+      "Private car & driver",
+      "Hotel pickup & drop-off",
+    ],
+    availableDays: ["Sat", "Sun"],
+    featured: false,
+    sortOrder: 8,
   },
   {
     name: "Lagoi Bay",
@@ -279,7 +381,7 @@ const SEED_TOURS = [
     ],
     availableDays: ["Sat", "Sun"],
     featured: false,
-    sortOrder: 6,
+    sortOrder: 9,
   },
   {
     name: "Masjid Agung Raja Batam",
@@ -313,7 +415,7 @@ const SEED_TOURS = [
     ],
     availableDays: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
     featured: false,
-    sortOrder: 7,
+    sortOrder: 10,
   },
   {
     name: "Masjid Raja Sultan",
@@ -346,7 +448,7 @@ const SEED_TOURS = [
     ],
     availableDays: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
     featured: false,
-    sortOrder: 8,
+    sortOrder: 11,
   },
   {
     name: "Masjid Tancak",
@@ -380,7 +482,7 @@ const SEED_TOURS = [
     ],
     availableDays: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
     featured: false,
-    sortOrder: 9,
+    sortOrder: 12,
   },
   {
     name: "Patung Seribu",
@@ -414,7 +516,7 @@ const SEED_TOURS = [
     ],
     availableDays: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
     featured: false,
-    sortOrder: 10,
+    sortOrder: 13,
   },
   {
     name: "Pulau Penyengat",
@@ -448,7 +550,7 @@ const SEED_TOURS = [
     ],
     availableDays: ["Sat", "Sun"],
     featured: false,
-    sortOrder: 11,
+    sortOrder: 14,
   },
   {
     name: "Puncak Beliung",
@@ -482,7 +584,7 @@ const SEED_TOURS = [
     ],
     availableDays: ["Thu", "Fri", "Sat", "Sun"],
     featured: false,
-    sortOrder: 12,
+    sortOrder: 15,
   },
   {
     name: "Saung Budaya",
@@ -516,7 +618,7 @@ const SEED_TOURS = [
     ],
     availableDays: ["Fri", "Sat", "Sun"],
     featured: false,
-    sortOrder: 13,
+    sortOrder: 16,
   },
   {
     name: "Telaga Biru dan Gurun Pasir",
@@ -550,7 +652,7 @@ const SEED_TOURS = [
     ],
     availableDays: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
     featured: false,
-    sortOrder: 14,
+    sortOrder: 17,
   },
   {
     name: "Treasure Bay",
@@ -584,6 +686,40 @@ const SEED_TOURS = [
     ],
     availableDays: ["Sat", "Sun"],
     featured: false,
-    sortOrder: 15,
+    sortOrder: 18,
+  },
+  {
+    name: "Welcome To Batam",
+    slug: "welcome-to-batam",
+    tagline: "The perfect first day — city icons, culture and sea views in one easy loop.",
+    description:
+      "A guided introduction to Batam: the landmark Gedung Gonggong, a temple visit, a mosque stop, and a sunset viewpoint by the strait. The fastest way to fall in love with the island.",
+    category: "City & Culture",
+    imageUrl: img("photo-1477959858617-67f85cf4f1df"),
+    gallery: [
+      img("photo-1477959858617-67f85cf4f1df"),
+      img("photo-1480714378408-67cf0d13bc1b"),
+      img("photo-1519677100203-a0e668c92439"),
+    ],
+    price: 350000,
+    durationHours: 6,
+    location: "Batam Centre",
+    rating: 4.8,
+    reviewCount: 212,
+    highlights: [
+      "City landmark photo stops",
+      "Temple & mosque visits",
+      "Sunset sea viewpoint",
+      "Local snack break",
+    ],
+    includes: [
+      "Private car & driver",
+      "English-speaking guide",
+      "Hotel pickup & drop-off",
+      "Bottled water",
+    ],
+    availableDays: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+    featured: false,
+    sortOrder: 19,
   },
 ];
