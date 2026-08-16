@@ -34,7 +34,7 @@ import { useLocation } from "react-router";
 const BRIDGE_IMAGE = "/assets/download.jpg";
 
 /** Number of packages in the seed catalog — used to trigger a re-seed. */
-const EXPECTED_TOUR_COUNT = 27;
+const EXPECTED_TOUR_COUNT = 15;
 
 const DRIVER_IMAGE = "/assets/10.webp";
 
@@ -113,13 +113,6 @@ const FLEET = [
     idr: 600000,
     rm: 175,
     sgd: 52,
-  },
-  {
-    name: "Toyota Zenix",
-    image: "/assets/Zenix.webp",
-    idr: 750000,
-    rm: 220,
-    sgd: 65,
   },
   {
     name: "Toyota Hiace",
@@ -277,19 +270,18 @@ function DriverSection() {
               <div className="aspect-square overflow-hidden rounded-3xl border border-border/70 shadow-sm">
                 <img
                   src="/assets/data-diri.jpeg"
-                  alt="Zi Tour Travel driver"
+                  alt="Zulkifli, your private driver in Batam"
                   loading="lazy"
                   className="size-full object-cover"
                 />
               </div>
             </div>
             <div className="rounded-3xl border border-border/70 bg-card p-7 shadow-sm sm:p-8">
-              {/* TODO: replace with the driver's real name and details */}
               <p className="font-mono text-xs font-medium uppercase tracking-[0.2em] text-primary">
                 <span className="text-primary/50">//&nbsp;</span>driver profile
               </p>
               <h3 className="mt-2 text-2xl font-bold tracking-tight">
-                Zi Tour Travel
+                Zulkifli
               </h3>
               <p className="mt-1 text-sm text-muted-foreground">
                 Private driver &amp; local guide · Batam
@@ -374,7 +366,6 @@ function BrowseTours({ tours }: { tours?: Doc<"tours">[] }) {
           <SectionHeader
             eyebrow="catalog"
             title="Browse every tour we run"
-            copy="Every package is private, guided and priced per person."
           />
         </Reveal>
 
