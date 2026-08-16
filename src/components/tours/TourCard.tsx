@@ -1,7 +1,7 @@
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import type { Doc } from "@/convex/_generated/dataModel";
-import { Clock, MapPin, Sparkles, Star } from "lucide-react";
+import { Sparkles, Star } from "lucide-react";
 import { TourDialog } from "./TourDialog";
 
 export function TourCard({ tour }: { tour: Doc<"tours"> }) {
@@ -14,7 +14,7 @@ export function TourCard({ tour }: { tour: Doc<"tours"> }) {
           <button
             type="button"
             aria-label={`View ${tour.name}`}
-            className="relative block aspect-[4/3] w-full cursor-pointer overflow-hidden bg-muted focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+            className="relative block aspect-[16/10] w-full cursor-pointer overflow-hidden bg-muted focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
           >
             <img
               src={tour.imageUrl}
@@ -24,7 +24,7 @@ export function TourCard({ tour }: { tour: Doc<"tours"> }) {
             />
             <div className="absolute inset-0 bg-black/0 transition-colors duration-300 group-hover:bg-black/10" />
             {tour.featured && (
-              <Badge className="absolute right-4 top-4 border-0 bg-primary text-primary-foreground shadow-sm">
+              <Badge className="absolute right-3 top-3 border-0 bg-primary text-primary-foreground shadow-sm">
                 <Sparkles className="size-3" /> Featured
               </Badge>
             )}
@@ -32,24 +32,16 @@ export function TourCard({ tour }: { tour: Doc<"tours"> }) {
         }
       />
 
-      <div className="flex flex-1 flex-col gap-3 p-5">
-        <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs text-muted-foreground">
-          <span className="inline-flex items-center gap-1.5">
-            <Star className="size-3.5 fill-amber-400 text-amber-400" />
-            <span className="font-semibold text-foreground">
-              {tour.rating.toFixed(1)}
-            </span>
-            ({tour.reviewCount})
+      <div className="flex flex-1 flex-col gap-2 p-4">
+        <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+          <Star className="size-3.5 fill-amber-400 text-amber-400" />
+          <span className="font-semibold text-foreground">
+            {tour.rating.toFixed(1)}
           </span>
-          <span className="inline-flex items-center gap-1.5">
-            <MapPin className="size-3.5" /> {tour.location}
-          </span>
-          <span className="inline-flex items-center gap-1.5">
-            <Clock className="size-3.5" /> {tour.durationHours}h
-          </span>
+          <span>({tour.reviewCount})</span>
         </div>
 
-        <h3 className="text-lg font-semibold leading-snug tracking-tight">
+        <h3 className="text-base font-semibold leading-snug tracking-tight">
           {tour.name}
         </h3>
         <p className="line-clamp-2 text-sm leading-6 text-muted-foreground">

@@ -33,6 +33,9 @@ import { useLocation } from "react-router";
 
 const BRIDGE_IMAGE = "/assets/download.jpg";
 
+/** Number of packages in the seed catalog — used to trigger a re-seed. */
+const EXPECTED_TOUR_COUNT = 18;
+
 const DRIVER_IMAGE = "/assets/10.webp";
 
 /** Gallery photos uploaded by the owner (2–10; 11 not uploaded yet). */
@@ -324,18 +327,17 @@ function DriverSection() {
 
 function TourGridSkeleton() {
   return (
-    <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-      {Array.from({ length: 6 }).map((_, i) => (
+    <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      {Array.from({ length: 8 }).map((_, i) => (
         <div
           key={i}
           className="overflow-hidden rounded-2xl border bg-card p-0 shadow-sm"
         >
-          <Skeleton className="aspect-[4/3] w-full rounded-none" />
-          <div className="space-y-3 p-5">
+          <Skeleton className="aspect-[16/10] w-full rounded-none" />
+          <div className="space-y-2.5 p-4">
             <Skeleton className="h-3.5 w-2/3" />
-            <Skeleton className="h-5 w-4/5" />
+            <Skeleton className="h-4 w-4/5" />
             <Skeleton className="h-3.5 w-full" />
-            <Skeleton className="h-3.5 w-1/2" />
           </div>
         </div>
       ))}
@@ -389,9 +391,9 @@ function BrowseTours({ tours }: { tours?: Doc<"tours">[] }) {
               </p>
             </div>
           ) : (
-            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
               {tours.map((tour, i) => (
-                <Reveal key={tour._id} delay={(i % 3) * 0.06} className="h-full">
+                <Reveal key={tour._id} delay={(i % 4) * 0.05} className="h-full">
                   <TourCard tour={tour} />
                 </Reveal>
               ))}
@@ -703,6 +705,7 @@ export default function Landing() {
     if (
       tours !== undefined &&
       (tours.length === 0 ||
+        tours.length < EXPECTED_TOUR_COUNT ||
         tours.some((tour) => !tour.gallery || tour.gallery.length === 0))
     ) {
       void seedTours();
