@@ -32,8 +32,31 @@ import { useLocation } from "react-router";
 
 const BRIDGE_IMAGE = "/assets/download.jpg";
 
-/** Number of packages in the seed catalog — used to trigger a re-seed. */
-const EXPECTED_TOUR_COUNT = 19;
+/**
+ * Tour names expected in the seed catalog — used to trigger a re-seed.
+ * Must stay in sync with SEED_TOURS in src/convex/tours.ts.
+ */
+const EXPECTED_TOUR_NAMES = [
+  "Barelang Bridge",
+  "Batam Zoo Paradise",
+  "Bluefire Beach Club Batam",
+  "Dino's Gate",
+  "Infinity Beach Club",
+  "Jet Ski Barelang/GP",
+  "Kampung Sawah",
+  "Lagoi Bay",
+  "Masjid Agung Raja Batam",
+  "Masjid Raja Sultan",
+  "Masjid Tancak",
+  "Patung Seribu",
+  "Pulau Penyengat",
+  "Puncak Beliung",
+  "Saung Budaya",
+  "Telaga Biru dan Gurun Pasir",
+  "Tepi Danau, Grand Mall & Nagoya Thamrin",
+  "Treasure Bay",
+  "Welcome To Batam",
+];
 
 const DRIVER_IMAGE = "/assets/10.webp";
 
@@ -105,13 +128,6 @@ const FLEET = [
     idr: 650000,
     rm: 150,
     sgd: 50,
-  },
-  {
-    name: "Toyota Innova",
-    image: "/assets/Innova.webp",
-    idr: 1200000,
-    rm: 350,
-    sgd: 95,
   },
   {
     name: "Toyota Hiace",
@@ -678,19 +694,17 @@ export default function Landing() {
 
   // Seed the catalog (and backfill new fields) so the site works in any
   // environment, including on data seeded before newer fields existed.
-  // Re-seed whenever any tour still uses a remote (Unsplash) photo, so the
-  // local asset photos and Indonesian captions are applied to old rows too.
+  // Re-seed whenever the set of tour names differs from the expected catalog
+  // (covers additions, removals and renames even when the count stays the
+  // same) or when a row is missing its gallery.
   useEffect(() => {
-    if (
-      tours !== undefined &&
-      (tours.length !== EXPECTED_TOUR_COUNT ||
-        tours.some(
-          (tour) =>
-            !tour.gallery ||
-            tour.gallery.length === 0 ||
-            !tour.imageUrl.startsWith("/assets/"),
-        ))
-    ) {
+    if (tours === undefined) return;
+    const names = new Set(tours.map((tour) => tour.name));
+    const needsSeed =
+      tours.length !== EXPECTED_TOUR_NAMES.length ||
+      EXPECTED_TOUR_NAMES.some((name) => !names.has(name)) ||
+      tours.some((tour) => !tour.gallery || tour.gallery.length === 0);
+    if (needsSeed) {
       void seedTours();
     }
   }, [tours, seedTours]);

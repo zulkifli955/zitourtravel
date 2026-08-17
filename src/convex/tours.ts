@@ -205,36 +205,6 @@ const SEED_TOURS = [
     sortOrder: 4,
   },
   {
-    name: "Gocart",
-    slug: "gocart",
-    tagline: "Put your foot down on Batam's go-kart track — laps, helmets and bragging rights.",
-    description:
-      "Rasakan keseruan memacu adrenalin di lintasan go-kart. Pilihan yang tepat untuk Anda yang ingin menambahkan aktivitas seru bersama teman atau keluarga.",
-    category: "Adventure",
-    imageUrl: asset("gocart1.webp"),
-    gallery: [asset("gocart1.webp"), asset("gocart2.webp"), asset("gocart3.webp")],
-    price: 350000,
-    durationHours: 2,
-    location: "Batam",
-    rating: 4.6,
-    reviewCount: 96,
-    highlights: [
-      "Go-kart racing laps",
-      "Safety briefing & helmet",
-      "Karts for kids & adults",
-      "Race results & bragging rights",
-    ],
-    includes: [
-      "Kart rental & fuel",
-      "Helmet & safety gear",
-      "Race briefing",
-      "Hotel pickup & drop-off",
-    ],
-    availableDays: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
-    featured: false,
-    sortOrder: 5,
-  },
-  {
     name: "Infinity Beach Club",
     slug: "infinity-beach-club",
     tagline: "An infinity pool that melts into the sea, plus beach service all day.",
@@ -262,7 +232,7 @@ const SEED_TOURS = [
     ],
     availableDays: ["Fri", "Sat", "Sun"],
     featured: false,
-    sortOrder: 6,
+    sortOrder: 5,
   },
   {
     name: "Jet Ski Barelang/GP",
@@ -292,7 +262,7 @@ const SEED_TOURS = [
     ],
     availableDays: ["Fri", "Sat", "Sun"],
     featured: false,
-    sortOrder: 7,
+    sortOrder: 6,
   },
   {
     name: "Kampung Sawah",
@@ -322,7 +292,7 @@ const SEED_TOURS = [
     ],
     availableDays: ["Sat", "Sun"],
     featured: false,
-    sortOrder: 8,
+    sortOrder: 7,
   },
   {
     name: "Lagoi Bay",
@@ -352,7 +322,7 @@ const SEED_TOURS = [
     ],
     availableDays: ["Sat", "Sun"],
     featured: false,
-    sortOrder: 9,
+    sortOrder: 8,
   },
   {
     name: "Masjid Agung Raja Batam",
@@ -382,7 +352,7 @@ const SEED_TOURS = [
     ],
     availableDays: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
     featured: false,
-    sortOrder: 10,
+    sortOrder: 9,
   },
   {
     name: "Masjid Raja Sultan",
@@ -411,7 +381,7 @@ const SEED_TOURS = [
     ],
     availableDays: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
     featured: false,
-    sortOrder: 11,
+    sortOrder: 10,
   },
   {
     name: "Masjid Tancak",
@@ -441,7 +411,7 @@ const SEED_TOURS = [
     ],
     availableDays: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
     featured: false,
-    sortOrder: 12,
+    sortOrder: 11,
   },
   {
     name: "Patung Seribu",
@@ -471,7 +441,7 @@ const SEED_TOURS = [
     ],
     availableDays: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
     featured: false,
-    sortOrder: 13,
+    sortOrder: 12,
   },
   {
     name: "Pulau Penyengat",
@@ -501,7 +471,7 @@ const SEED_TOURS = [
     ],
     availableDays: ["Sat", "Sun"],
     featured: false,
-    sortOrder: 14,
+    sortOrder: 13,
   },
   {
     name: "Puncak Beliung",
@@ -531,7 +501,7 @@ const SEED_TOURS = [
     ],
     availableDays: ["Thu", "Fri", "Sat", "Sun"],
     featured: false,
-    sortOrder: 15,
+    sortOrder: 14,
   },
   {
     name: "Saung Budaya",
@@ -561,7 +531,7 @@ const SEED_TOURS = [
     ],
     availableDays: ["Fri", "Sat", "Sun"],
     featured: false,
-    sortOrder: 16,
+    sortOrder: 15,
   },
   {
     name: "Telaga Biru dan Gurun Pasir",
@@ -582,6 +552,41 @@ const SEED_TOURS = [
       "White sand dunes",
       "Golden-hour photography",
       "Easy walking paths",
+    ],
+    includes: [
+      "Private car & driver",
+      "English-speaking guide",
+      "Hotel pickup & drop-off",
+      "Bottled water",
+    ],
+    availableDays: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+    featured: false,
+    sortOrder: 16,
+  },
+  {
+    name: "Tepi Danau, Grand Mall & Nagoya Thamrin",
+    slug: "tepi-danau-grand-mall-nagoya-thamrin",
+    tagline: "Lakeside calm meets Batam's busiest shopping streets — malls, food courts and Nagoya's famous bargains.",
+    description:
+      "Nikmati perpaduan wisata kota dan relaksasi: santai di tepi danau, lalu jelajahi pusat perbelanjaan Grand Mall Nagoya Hill dan Nagoya Thamrin yang legendaris. Cocok untuk berbelanja, kuliner, dan bersantai.",
+    category: "City & Culture",
+    imageUrl:
+      "https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=crop&w=1200&q=70",
+    gallery: [
+      "https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=crop&w=1200&q=70",
+      "https://images.unsplash.com/photo-1519567241046-7f570eee3ce6?auto=format&fit=crop&w=1200&q=70",
+      "https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=1200&q=70",
+    ],
+    price: 350000,
+    durationHours: 5,
+    location: "Nagoya",
+    rating: 4.7,
+    reviewCount: 132,
+    highlights: [
+      "Lakeside stroll & photo stops",
+      "Grand Mall Nagoya Hill shopping",
+      "Nagoya Thamrin City & food court",
+      "Local snack & coffee break",
     ],
     includes: [
       "Private car & driver",
