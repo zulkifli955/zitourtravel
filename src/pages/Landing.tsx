@@ -41,6 +41,8 @@ const EXPECTED_TOUR_NAMES = [
   "Batam Zoo Paradise",
   "Bluefire Beach Club Batam",
   "Dino's Gate",
+  "Gocart",
+  "Grand Mall Nagoya Hill & Nagoya Thamrin",
   "Infinity Beach Club",
   "Jet Ski Barelang/GP",
   "Kampung Sawah",
@@ -53,7 +55,7 @@ const EXPECTED_TOUR_NAMES = [
   "Puncak Beliung",
   "Saung Budaya",
   "Telaga Biru dan Gurun Pasir",
-  "Tepi Danau, Grand Mall & Nagoya Thamrin",
+  "Tepi Danau",
   "Treasure Bay",
   "Welcome To Batam",
 ];
