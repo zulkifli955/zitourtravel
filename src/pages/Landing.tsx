@@ -149,7 +149,7 @@ const FLEET = [
     image: "/assets/Hiace.webp",
     idr: 1400000,
     rm: 300,
-    sgd: 150,
+    sgd: 100,
   },
 ];
 
