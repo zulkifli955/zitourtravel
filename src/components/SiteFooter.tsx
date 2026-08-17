@@ -1,5 +1,5 @@
 import { BRAND, CONTACT, waLink } from "@/lib/site";
-import { Compass, Facebook, Instagram, MapPin, MessageCircle, Users } from "lucide-react";
+import { Facebook, Instagram, MapPin, MessageCircle, Users } from "lucide-react";
 
 /** TODO: replace the Facebook placeholder with the agency's real profile URL. */
 const SOCIALS = [
@@ -30,16 +30,12 @@ export function SiteFooter() {
       <div className="mx-auto w-full max-w-6xl px-4 py-14 sm:px-6">
         <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-3">
           <div>
-            <a href="/" className="flex items-center gap-2.5">
-              <span className="flex size-9 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-sm">
-                <Compass className="size-5" />
-              </span>
-              <span className="text-lg font-bold tracking-tight">
-                Zi Tour
-                <span className="ml-1.5 font-medium text-muted-foreground">
-                  Travel
-                </span>
-              </span>
+            <a href="/" aria-label="Zi Tour Travel — home">
+              <img
+                src="/assets/travel_logos_-_Made_with_PosterMyWall__1_.png"
+                alt="Zi Tour Travel logo"
+                className="h-10 w-auto object-contain"
+              />
             </a>
             <p className="mt-4 max-w-xs text-sm leading-6 text-muted-foreground">
               Day tours and experiences across Batam — private cars, local

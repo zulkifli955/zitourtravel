@@ -1,6 +1,5 @@
 import { api } from "@/convex/_generated/api";
 import type { Doc } from "@/convex/_generated/dataModel";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { SiteFooter } from "@/components/SiteFooter";
@@ -199,12 +198,6 @@ function Hero() {
 
         <div className="relative mx-auto flex min-h-[560px] w-full max-w-6xl flex-col justify-center px-4 pb-16 pt-12 sm:px-6 lg:min-h-[600px]">
           <div className="max-w-2xl">
-            <Reveal>
-              <Badge className="gap-1.5 rounded-full border border-white/25 bg-white/10 px-3 py-1 text-xs font-medium text-white backdrop-blur-sm">
-                <MapPin className="size-3.5 text-teal-300" />
-                Batam, Indonesia · 45 min from Singapore
-              </Badge>
-            </Reveal>
             <Reveal delay={0.05}>
               <h1 className="mt-6 text-balance text-4xl font-bold tracking-tight text-white sm:text-5xl lg:text-[3.4rem] lg:leading-[1.06]">
                 Batam&apos;s best day tours,{" "}
@@ -212,13 +205,6 @@ function Hero() {
               </h1>
             </Reveal>
             <Reveal delay={0.1}>
-              <p className="mt-5 max-w-xl text-pretty text-base leading-7 text-white/85 sm:text-lg sm:leading-8">
-                From Barelang&apos;s bridges to Nongsa&apos;s beaches — a
-                catalog of private, guided day trips. Browse, pick one, and
-                message us on WhatsApp.
-              </p>
-            </Reveal>
-            <Reveal delay={0.15}>
               <div className="mt-8 flex flex-wrap items-center gap-3">
                 <Button
                   asChild
