@@ -73,7 +73,7 @@ export function TourDialog({
             </DialogDescription>
           </DialogHeader>
 
-          <p className="text-sm leading-7 text-muted-foreground sm:text-base sm:leading-8">
+          <p className="whitespace-pre-line text-sm leading-7 text-muted-foreground sm:text-base sm:leading-8">
             {tour.description}
           </p>
         </div>

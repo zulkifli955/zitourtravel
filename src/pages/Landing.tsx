@@ -33,32 +33,33 @@ import { useLocation } from "react-router";
 const BRIDGE_IMAGE = "/assets/download.jpg";
 
 /**
- * Tour names expected in the seed catalog — used to trigger a re-seed.
- * Must stay in sync with SEED_TOURS in src/convex/tours.ts.
+ * Expected main photo per tour in the seed catalog — used to trigger a
+ * re-seed when the catalog changes (additions, removals, photo swaps or
+ * caption updates). Must stay in sync with SEED_TOURS in src/convex/tours.ts.
  */
-const EXPECTED_TOUR_NAMES = [
-  "Barelang Bridge",
-  "Batam Zoo Paradise",
-  "Bluefire Beach Club Batam",
-  "Dino's Gate",
-  "Gocart",
-  "Grand Mall Nagoya Hill & Nagoya Thamrin",
-  "Infinity Beach Club",
-  "Jet Ski Barelang/GP",
-  "Kampung Sawah",
-  "Lagoi Bay",
-  "Masjid Agung Raja Batam",
-  "Masjid Raja Sultan",
-  "Masjid Tancak",
-  "Patung Seribu",
-  "Pulau Penyengat",
-  "Puncak Beliung",
-  "Saung Budaya",
-  "Telaga Biru dan Gurun Pasir",
-  "Tepi Danau",
-  "Treasure Bay",
-  "Welcome To Batam",
-];
+const EXPECTED_TOUR_PHOTOS: Record<string, string> = {
+  "Barelang Bridge": "/assets/barelang1.webp",
+  "Batam Zoo Paradise": "/assets/batamzoo1.webp",
+  "Bluefire Beach Club Batam": "/assets/blufire1.webp",
+  "Dino's Gate": "/assets/dino1.webp",
+  Gocart: "/assets/gocart1.jpg",
+  "Grand Mall Nagoya Hill & Nagoya Thamrin": "/assets/mall1.jpg",
+  "Infinity Beach Club": "/assets/infinity1.webp",
+  "Jet Ski Barelang/GP": "/assets/jetski1.webp",
+  "Kampung Sawah": "/assets/kampung1.webp",
+  "Lagoi Bay": "/assets/lagoi1.webp",
+  "Masjid Agung Raja Batam": "/assets/masjidagung1.webp",
+  "Masjid Raja Sultan": "/assets/masjidraya1.webp",
+  "Masjid Tancak": "/assets/tanjak1.webp",
+  "Patung Seribu": "/assets/patun1.webp",
+  "Pulau Penyengat": "/assets/pulau1.webp",
+  "Puncak Beliung": "/assets/puncak1.webp",
+  "Saung Budaya": "/assets/saung1.webp",
+  "Telaga Biru dan Gurun Pasir": "/assets/telaga1.webp",
+  "Tepi Danau": "/assets/tepi1.jpg",
+  "Treasure Bay": "/assets/trea1.webp",
+  "Welcome To Batam": "/assets/wtb1.webp",
+};
 
 const DRIVER_IMAGE = "/assets/10.webp";
 
@@ -696,16 +697,24 @@ export default function Landing() {
 
   // Seed the catalog (and backfill new fields) so the site works in any
   // environment, including on data seeded before newer fields existed.
-  // Re-seed whenever the set of tour names differs from the expected catalog
-  // (covers additions, removals and renames even when the count stays the
-  // same) or when a row is missing its gallery.
+  // Re-seed whenever the catalog in the database differs from the expected
+  // one: missing/renamed tours, photo swaps or rows without a gallery. The
+  // sync-style seed keeps every row's photos and captions up to date, so
+  // this condition is only true until the next seed finishes.
   useEffect(() => {
     if (tours === undefined) return;
-    const names = new Set(tours.map((tour) => tour.name));
+    const byName = new Map(tours.map((tour) => [tour.name, tour]));
     const needsSeed =
-      tours.length !== EXPECTED_TOUR_NAMES.length ||
-      EXPECTED_TOUR_NAMES.some((name) => !names.has(name)) ||
-      tours.some((tour) => !tour.gallery || tour.gallery.length === 0);
+      Object.entries(EXPECTED_TOUR_PHOTOS).some(([name, imageUrl]) => {
+        const tour = byName.get(name);
+        return (
+          !tour ||
+          tour.imageUrl !== imageUrl ||
+          !tour.gallery ||
+          tour.gallery.length === 0
+        );
+      }) ||
+      tours.some((tour) => !EXPECTED_TOUR_PHOTOS[tour.name]);
     if (needsSeed) {
       void seedTours();
     }

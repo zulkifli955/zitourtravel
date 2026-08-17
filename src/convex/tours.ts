@@ -211,13 +211,8 @@ const SEED_TOURS = [
     description:
       "Rasakan keseruan memacu adrenalin di lintasan go-kart. Pilihan yang tepat untuk Anda yang ingin menambahkan aktivitas seru bersama teman atau keluarga.",
     category: "Adventure",
-    imageUrl:
-      "https://images.unsplash.com/photo-1547347298-4074fc3086f0?auto=format&fit=crop&w=1200&q=70",
-    gallery: [
-      "https://images.unsplash.com/photo-1547347298-4074fc3086f0?auto=format&fit=crop&w=1200&q=70",
-      "https://images.unsplash.com/photo-1544198365-f5d60b6d8190?auto=format&fit=crop&w=1200&q=70",
-      "https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=1200&q=70",
-    ],
+    imageUrl: asset("gocart1.jpg"),
+    gallery: [asset("gocart1.jpg"), asset("gocart2.jpg"), asset("gocart3.jpg")],
     price: 350000,
     durationHours: 2,
     location: "Batam",
@@ -244,15 +239,10 @@ const SEED_TOURS = [
     slug: "grand-mall-nagoya-hill-nagoya-thamrin",
     tagline: "Two of Nagoya's biggest malls — duty-free shopping, food courts and bargain hunting.",
     description:
-      "Jelajahi dua pusat perbelanjaan ikonik Nagoya: Grand Mall Nagoya Hill dan Nagoya Thamrin. Tempat yang tepat untuk berbelanja, mencicipi kuliner lokal, dan menikmati suasana kota Batam.",
+      "Grand Mall Batam\nSalah satu pusat perbelanjaan yang cocok untuk melengkapi perjalanan wisata di Batam. Nikmati berbagai pilihan toko, kuliner, dan hiburan dalam suasana yang nyaman bersama keluarga maupun teman.\n\nNagoya Hill Shopping Mall\nDestinasi favorit untuk berbelanja dan menikmati kuliner di pusat kota Batam. Dengan pilihan toko dan tempat makan yang beragam, Nagoya Hill cocok menjadi tempat untuk bersantai sekaligus mencari oleh-oleh.\n\nNagoya Thamrin\nKawasan yang berada di jantung Kota Batam dengan suasana perkotaan yang ramai. Cocok untuk menikmati kuliner, berbelanja, dan merasakan atmosfer pusat kota Batam.",
     category: "City & Culture",
-    imageUrl:
-      "https://images.unsplash.com/photo-1519567241046-7f570eee3ce6?auto=format&fit=crop&w=1200&q=70",
-    gallery: [
-      "https://images.unsplash.com/photo-1519567241046-7f570eee3ce6?auto=format&fit=crop&w=1200&q=70",
-      "https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=1200&q=70",
-      "https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?auto=format&fit=crop&w=1200&q=70",
-    ],
+    imageUrl: asset("mall1.jpg"),
+    gallery: [asset("mall1.jpg"), asset("mall2.jpg"), asset("mall3.jpg")],
     price: 250000,
     durationHours: 4,
     location: "Nagoya",
@@ -638,15 +628,10 @@ const SEED_TOURS = [
     slug: "tepi-danau",
     tagline: "Relax by the lake — cool breezes, calm water and easy photo stops.",
     description:
-      "Nikmati suasana tenang di tepi danau dengan pemandangan air yang menenangkan. Tempat yang pas untuk bersantai, berjalan santai, dan berfoto bersama keluarga.",
+      "Tempat yang cocok bagi Anda yang ingin menikmati suasana santai dan pemandangan danau. Nikmati udara terbuka, suasana yang tenang, serta momen berkumpul bersama keluarga atau orang terdekat.",
     category: "City & Culture",
-    imageUrl:
-      "https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=crop&w=1200&q=70",
-    gallery: [
-      "https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=crop&w=1200&q=70",
-      "https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1200&q=70",
-      "https://images.unsplash.com/photo-1439066615861-d1af74d74000?auto=format&fit=crop&w=1200&q=70",
-    ],
+    imageUrl: asset("tepi1.jpg"),
+    gallery: [asset("tepi1.jpg"), asset("tepi2.jpg"), asset("tepi3.jpg")],
     price: 200000,
     durationHours: 3,
     location: "Batam",
