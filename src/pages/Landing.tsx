@@ -33,32 +33,44 @@ import { useLocation } from "react-router";
 const BRIDGE_IMAGE = "/assets/download.jpg";
 
 /**
- * Expected main photo per tour in the seed catalog — used to trigger a
+ * Expected photo gallery per tour in the seed catalog — used to trigger a
  * re-seed when the catalog changes (additions, removals, photo swaps or
- * caption updates). Must stay in sync with SEED_TOURS in src/convex/tours.ts.
+ * gallery changes). Must stay in sync with SEED_TOURS in src/convex/tours.ts.
  */
-const EXPECTED_TOUR_PHOTOS: Record<string, string> = {
-  "Barelang Bridge": "/assets/barelang1.webp",
-  "Batam Zoo Paradise": "/assets/batamzoo1.webp",
-  "Bluefire Beach Club Batam": "/assets/blufire1.webp",
-  "Dino's Gate": "/assets/dino1.webp",
-  Gocart: "/assets/gocart1.jpg",
-  "Grand Mall Nagoya Hill & Nagoya Thamrin": "/assets/mall1.jpg",
-  "Infinity Beach Club": "/assets/infinity1.webp",
-  "Jet Ski Barelang/GP": "/assets/jetski1.webp",
-  "Kampung Sawah": "/assets/kampung1.webp",
-  "Lagoi Bay": "/assets/lagoi1.webp",
-  "Masjid Agung Raja Batam": "/assets/masjidagung1.webp",
-  "Masjid Raja Sultan": "/assets/masjidraya1.webp",
-  "Masjid Tancak": "/assets/tanjak1.webp",
-  "Patung Seribu": "/assets/patun1.webp",
-  "Pulau Penyengat": "/assets/pulau1.webp",
-  "Puncak Beliung": "/assets/puncak1.webp",
-  "Saung Budaya": "/assets/saung1.webp",
-  "Telaga Biru dan Gurun Pasir": "/assets/telaga1.webp",
-  "Tepi Danau": "/assets/tepi1.jpg",
-  "Treasure Bay": "/assets/trea1.webp",
-  "Welcome To Batam": "/assets/wtb1.webp",
+const EXPECTED_TOUR_GALLERIES: Record<string, string> = {
+  "Barelang Bridge":
+    "/assets/barelang1.webp|/assets/barelang2.webp|/assets/barelang3.webp",
+  "Batam Zoo Paradise":
+    "/assets/batamzoo1.webp|/assets/batamzoo2.webp|/assets/batamzoo3.webp",
+  "Bluefire Beach Club Batam":
+    "/assets/blufire1.webp|/assets/blufire2.webp|/assets/blufire3.webp",
+  "Dino's Gate": "/assets/dino1.webp|/assets/dino2.webp|/assets/dino3.webp",
+  Gocart: "/assets/gocart1.jpg|/assets/gocart2.jpg|/assets/gocart3.jpg",
+  "Grand Mall Nagoya Hill & Nagoya Thamrin":
+    "/assets/mall1.jpg|/assets/mall2.jpg|/assets/mall3.jpg",
+  "Infinity Beach Club":
+    "/assets/infinity1.webp|/assets/infinity2.webp|/assets/infinity3.webp",
+  "Jet Ski Barelang/GP":
+    "/assets/jetski1.webp|/assets/jetski2.webp|/assets/jetski3.webp",
+  "Kampung Sawah":
+    "/assets/kampung1.webp|/assets/kampung2.webp|/assets/kampung3.webp",
+  "Lagoi Bay": "/assets/lagoi1.webp|/assets/lagoi2.webp|/assets/lagoi3.webp",
+  "Masjid Agung Raja Batam":
+    "/assets/masjidagung1.webp|/assets/masjidagung2.webp|/assets/masjidagung3.webp",
+  "Masjid Raja Sultan":
+    "/assets/masjidraya1.webp|/assets/masjidraya2.webp|/assets/masjidraya3.webp",
+  "Masjid Tancak": "/assets/tanjak1.webp|/assets/tanjak2.webp|/assets/tanjak3.webp",
+  "Patung Seribu": "/assets/patun1.webp|/assets/patun2.webp|/assets/patun3.webp",
+  "Pulau Penyengat":
+    "/assets/pulau1.webp|/assets/pulau2.webp|/assets/pulau3.webp",
+  "Puncak Beliung":
+    "/assets/puncak1.webp|/assets/puncak2.webp|/assets/puncak3.webp",
+  "Saung Budaya": "/assets/saung1.webp|/assets/saung2.webp|/assets/saung3.webp",
+  "Telaga Biru dan Gurun Pasir":
+    "/assets/telaga1.webp|/assets/telaga2.webp|/assets/telaga3.webp",
+  "Tepi Danau": "/assets/tepi1.jpg|/assets/tepi2.jpg",
+  "Treasure Bay": "/assets/trea1.webp|/assets/trea2.webp|/assets/trea3.webp",
+  "Welcome To Batam": "/assets/wtb1.webp|/assets/wtb2.webp|/assets/wtb3.webp",
 };
 
 const DRIVER_IMAGE = "/assets/10.webp";
@@ -698,23 +710,18 @@ export default function Landing() {
   // Seed the catalog (and backfill new fields) so the site works in any
   // environment, including on data seeded before newer fields existed.
   // Re-seed whenever the catalog in the database differs from the expected
-  // one: missing/renamed tours, photo swaps or rows without a gallery. The
-  // sync-style seed keeps every row's photos and captions up to date, so
-  // this condition is only true until the next seed finishes.
+  // one: missing/renamed tours, photo or gallery swaps. The sync-style seed
+  // keeps every row's photos and captions up to date, so this condition is
+  // only true until the next seed finishes.
   useEffect(() => {
     if (tours === undefined) return;
     const byName = new Map(tours.map((tour) => [tour.name, tour]));
     const needsSeed =
-      Object.entries(EXPECTED_TOUR_PHOTOS).some(([name, imageUrl]) => {
+      Object.entries(EXPECTED_TOUR_GALLERIES).some(([name, gallery]) => {
         const tour = byName.get(name);
-        return (
-          !tour ||
-          tour.imageUrl !== imageUrl ||
-          !tour.gallery ||
-          tour.gallery.length === 0
-        );
+        return !tour || tour.gallery?.join("|") !== gallery;
       }) ||
-      tours.some((tour) => !EXPECTED_TOUR_PHOTOS[tour.name]);
+      tours.some((tour) => !EXPECTED_TOUR_GALLERIES[tour.name]);
     if (needsSeed) {
       void seedTours();
     }

@@ -631,7 +631,7 @@ const SEED_TOURS = [
       "Tempat yang cocok bagi Anda yang ingin menikmati suasana santai dan pemandangan danau. Nikmati udara terbuka, suasana yang tenang, serta momen berkumpul bersama keluarga atau orang terdekat.",
     category: "City & Culture",
     imageUrl: asset("tepi1.jpg"),
-    gallery: [asset("tepi1.jpg"), asset("tepi2.jpg"), asset("tepi3.jpg")],
+    gallery: [asset("tepi1.jpg"), asset("tepi2.jpg")],
     price: 200000,
     durationHours: 3,
     location: "Batam",
