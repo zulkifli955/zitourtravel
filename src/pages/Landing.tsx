@@ -678,11 +678,18 @@ export default function Landing() {
 
   // Seed the catalog (and backfill new fields) so the site works in any
   // environment, including on data seeded before newer fields existed.
+  // Re-seed whenever any tour still uses a remote (Unsplash) photo, so the
+  // local asset photos and Indonesian captions are applied to old rows too.
   useEffect(() => {
     if (
       tours !== undefined &&
       (tours.length !== EXPECTED_TOUR_COUNT ||
-        tours.some((tour) => !tour.gallery || tour.gallery.length === 0))
+        tours.some(
+          (tour) =>
+            !tour.gallery ||
+            tour.gallery.length === 0 ||
+            !tour.imageUrl.startsWith("/assets/"),
+        ))
     ) {
       void seedTours();
     }
