@@ -34,9 +34,9 @@ export const getBySlug = query({
 });
 
 /**
- * Sync-style seed for the tours catalog. Inserts missing tours, backfills
- * new fields (e.g. gallery) onto older rows, and removes rows whose slug is
- * no longer part of SEED_TOURS — so the table always mirrors the catalog.
+ * Sync-style seed for the tours catalog. Inserts missing tours, updates the
+ * photo/caption fields on existing rows, and removes rows whose slug is no
+ * longer part of SEED_TOURS — so the table always mirrors the catalog.
  */
 export const seed = mutation({
   args: {},
@@ -49,9 +49,17 @@ export const seed = mutation({
     for (const tour of SEED_TOURS) {
       const cur = existing.find((t) => t.slug === tour.slug);
       if (cur) {
-        // Backfill fields added after the row was first created.
-        if (!cur.gallery || cur.gallery.length === 0) {
-          await ctx.db.patch(cur._id, { gallery: tour.gallery });
+        // Keep photos and captions in sync with the latest seed data.
+        if (
+          cur.imageUrl !== tour.imageUrl ||
+          cur.gallery?.join("|") !== tour.gallery.join("|") ||
+          cur.description !== tour.description
+        ) {
+          await ctx.db.patch(cur._id, {
+            imageUrl: tour.imageUrl,
+            gallery: tour.gallery,
+            description: tour.description,
+          });
         }
         continue;
       }
@@ -72,8 +80,7 @@ export const seed = mutation({
   },
 });
 
-const img = (id: string) =>
-  `https://images.unsplash.com/${id}?q=80&w=1600&auto=format&fit=crop`;
+const asset = (name: string) => `/assets/${name}`;
 
 /** 19 attractions, sorted alphabetically by name. */
 const SEED_TOURS = [
@@ -82,14 +89,10 @@ const SEED_TOURS = [
     slug: "barelang-bridge",
     tagline: "Six bridges link Batam to its southern islets — Batam's most photographed drive.",
     description:
-      "Cross the iconic Barelang bridge chain and stop at the famous viewpoint over the Riau Strait. The classic Batam postcard, with as many photo stops as you like.",
+      "Salah satu ikon Batam yang wajib dikunjungi. Nikmati panorama laut dan pemandangan khas kepulauan sambil mengabadikan momen perjalanan.",
     category: "City & Culture",
-    imageUrl: img("photo-1502920917128-1aa500764cbd"),
-    gallery: [
-      img("photo-1502920917128-1aa500764cbd"),
-      img("photo-1519452575417-564c1401ecc0"),
-      img("photo-1506929562872-bb421503ef21"),
-    ],
+    imageUrl: asset("barelang1.webp"),
+    gallery: [asset("barelang1.webp"), asset("barelang2.webp"), asset("barelang3.webp")],
     price: 300000,
     durationHours: 4,
     location: "Barelang",
@@ -116,14 +119,10 @@ const SEED_TOURS = [
     slug: "batam-zoo-paradise",
     tagline: "Tigers, birds and big cats in a shady zoo that kids never want to leave.",
     description:
-      "A relaxed day at Batam Zoo Paradise in Bengkong: see tigers, lions, birds and reptiles up close, catch feeding time, and let the kids burn off energy in the playground.",
+      "Destinasi wisata keluarga yang cocok untuk mengenal berbagai jenis satwa sekaligus menikmati waktu santai bersama keluarga.",
     category: "Family Fun",
-    imageUrl: img("photo-1444464666168-49d633b86797"),
-    gallery: [
-      img("photo-1444464666168-49d633b86797"),
-      img("photo-1500937386664-56d1dfef3854"),
-      img("photo-1466692476868-aef1dfb1e735"),
-    ],
+    imageUrl: asset("batamzoo1.webp"),
+    gallery: [asset("batamzoo1.webp"), asset("batamzoo2.webp"), asset("batamzoo3.webp")],
     price: 275000,
     durationHours: 5,
     location: "Bengkong",
@@ -150,14 +149,10 @@ const SEED_TOURS = [
     slug: "bluefire-beach-club-batam",
     tagline: "The full Bluefire experience — infinity pool, beachfront dining and live music.",
     description:
-      "Bluefire Beach Club Batam brings the full beach-club package: an infinity pool facing the sea, a long white-sand stretch, and a menu that runs from grilled seafood to sunset cocktails.",
+      "Destinasi dengan suasana unik dan menarik untuk dikunjungi, cocok untuk bersantai, berfoto, dan menikmati pengalaman berbeda selama berada di Batam.",
     category: "Island & Beach",
-    imageUrl: img("photo-1544551763-46a013bb70d5"),
-    gallery: [
-      img("photo-1544551763-46a013bb70d5"),
-      img("photo-1540541338287-41700207dee6"),
-      img("photo-1519046904884-53103b34b206"),
-    ],
+    imageUrl: asset("blufire1.webp"),
+    gallery: [asset("blufire1.webp"), asset("blufire2.webp"), asset("blufire3.webp")],
     price: 450000,
     durationHours: 6,
     location: "Nongsa",
@@ -184,14 +179,10 @@ const SEED_TOURS = [
     slug: "dinos-gate",
     tagline: "Walk among roaring dinosaurs at Batam's prehistoric theme park.",
     description:
-      "Dino's Gate brings the Jurassic to Batam: life-size animatronic dinosaurs that roar and move, a fossil dig for kids, and plenty of photo moments with your favorite reptiles.",
+      "Tempat wisata bertema dinosaurus yang cocok untuk keluarga, terutama anak-anak. Nikmati suasana seru sambil mengabadikan berbagai momen menarik.",
     category: "Family Fun",
-    imageUrl: img("photo-1476673160081-cf065607f449"),
-    gallery: [
-      img("photo-1476673160081-cf065607f449"),
-      img("photo-1500375592092-40eb2168fd21"),
-      img("photo-1444464666168-49d633b86797"),
-    ],
+    imageUrl: asset("dino1.webp"),
+    gallery: [asset("dino1.webp"), asset("dino2.webp"), asset("dino3.webp")],
     price: 250000,
     durationHours: 4,
     location: "Batu Aji",
@@ -218,14 +209,10 @@ const SEED_TOURS = [
     slug: "gocart",
     tagline: "Put your foot down on Batam's go-kart track — laps, helmets and bragging rights.",
     description:
-      "Get behind the wheel at Batam's go-kart circuit: safety briefing, helmet on, and a few fast laps around the track. Perfect for families, friends and anyone with a need for speed.",
+      "Rasakan keseruan memacu adrenalin di lintasan go-kart. Pilihan yang tepat untuk Anda yang ingin menambahkan aktivitas seru bersama teman atau keluarga.",
     category: "Adventure",
-    imageUrl: img("photo-1547347298-4074fc3086f0"),
-    gallery: [
-      img("photo-1547347298-4074fc3086f0"),
-      img("photo-1511994298241-608e28f14fde"),
-      img("photo-1500375592092-40eb2168fd21"),
-    ],
+    imageUrl: asset("gocart1.webp"),
+    gallery: [asset("gocart1.webp"), asset("gocart2.webp"), asset("gocart3.webp")],
     price: 350000,
     durationHours: 2,
     location: "Batam",
@@ -252,14 +239,10 @@ const SEED_TOURS = [
     slug: "infinity-beach-club",
     tagline: "An infinity pool that melts into the sea, plus beach service all day.",
     description:
-      "Infinity Beach Club's pool really does look endless — it meets the horizon over the strait. Spend the day between lounger, pool and bar, with the Singapore skyline as the backdrop.",
+      "Nikmati suasana pantai yang santai dengan pemandangan laut dan udara terbuka. Tempat yang pas untuk melepas penat dan menikmati waktu bersama orang terdekat.",
     category: "Island & Beach",
-    imageUrl: img("photo-1544551763-46a013bb70d5"),
-    gallery: [
-      img("photo-1544551763-46a013bb70d5"),
-      img("photo-1510414842594-a61c69b5ae57"),
-      img("photo-1507525428034-b723cf961d3e"),
-    ],
+    imageUrl: asset("infinity1.webp"),
+    gallery: [asset("infinity1.webp"), asset("infinity2.webp"), asset("infinity3.webp")],
     price: 475000,
     durationHours: 6,
     location: "Nongsa",
@@ -286,14 +269,10 @@ const SEED_TOURS = [
     slug: "jet-ski-barelang-gp",
     tagline: "Ride the waves beneath Barelang's bridges — jet ski thrills with sea views.",
     description:
-      "Feel the spray on a jet ski session in the waters around Barelang: full safety gear, a quick lesson, then open throttle across the bay with the bridges as your backdrop.",
+      "Tambahkan keseruan perjalanan dengan aktivitas air yang memacu adrenalin. Rasakan sensasi mengendarai jet ski sambil menikmati pemandangan laut Batam.",
     category: "Adventure",
-    imageUrl: img("photo-1502680390469-be75c86b636f"),
-    gallery: [
-      img("photo-1502680390469-be75c86b636f"),
-      img("photo-1506929562872-bb421503ef21"),
-      img("photo-1519452575417-564c1401ecc0"),
-    ],
+    imageUrl: asset("jetski1.webp"),
+    gallery: [asset("jetski1.webp"), asset("jetski2.webp"), asset("jetski3.webp")],
     price: 500000,
     durationHours: 2,
     location: "Barelang",
@@ -320,14 +299,10 @@ const SEED_TOURS = [
     slug: "kampung-sawah",
     tagline: "Green rice paddies, water buffalo and village calm just outside the city.",
     description:
-      "Kampung Sawah is Batam's slice of countryside: terraced paddies, water buffalo, and friendly farmers who'll show you how rice goes from field to plate.",
+      "Hadirkan suasana pedesaan di tengah perjalanan Anda. Nuansa hijau dan lingkungan yang santai menjadikannya tempat yang menarik untuk berfoto dan bersantai.",
     category: "Family Fun",
-    imageUrl: img("photo-1500937386664-56d1dfef3854"),
-    gallery: [
-      img("photo-1500937386664-56d1dfef3854"),
-      img("photo-1466692476868-aef1dfb1e735"),
-      img("photo-1500375592092-40eb2168fd21"),
-    ],
+    imageUrl: asset("kampung1.webp"),
+    gallery: [asset("kampung1.webp"), asset("kampung2.webp"), asset("kampung3.webp")],
     price: 250000,
     durationHours: 4,
     location: "Sekupang",
@@ -354,14 +329,10 @@ const SEED_TOURS = [
     slug: "lagoi-bay",
     tagline: "Golden sand and calm bays on Bintan's resort coast, an hour from Batam.",
     description:
-      "Cross to Bintan for Lagoi Bay's long stretches of golden sand and calm, shallow water — resorts, beach clubs and a chilled-out pace that's a world away from the city.",
+      "Nikmati pesona kawasan wisata Lagoi dengan suasana tropis, pantai, dan berbagai pilihan aktivitas yang cocok untuk liburan maupun staycation.",
     category: "Island & Beach",
-    imageUrl: img("photo-1507525428034-b723cf961d3e"),
-    gallery: [
-      img("photo-1507525428034-b723cf961d3e"),
-      img("photo-1473116763249-2faaef81ccda"),
-      img("photo-1530521954074-e64f6810b32d"),
-    ],
+    imageUrl: asset("lagoi1.webp"),
+    gallery: [asset("lagoi1.webp"), asset("lagoi2.webp"), asset("lagoi3.webp")],
     price: 700000,
     durationHours: 8,
     location: "Lagoi, Bintan",
@@ -388,14 +359,10 @@ const SEED_TOURS = [
     slug: "masjid-agung-raja-batam",
     tagline: "Batam's grand mosque, with its soaring dome and waterfront setting.",
     description:
-      "Masjid Agung Raja Batam is the island's landmark place of worship. Visit between prayer times, admire the architecture and the peaceful waterfront grounds, and learn about its role in the community.",
+      "Salah satu landmark penting Batam dengan arsitektur yang menarik. Cocok menjadi bagian dari perjalanan wisata religi sekaligus mengenal sisi ikonik kota Batam.",
     category: "City & Culture",
-    imageUrl: img("photo-1564507592333-c60657eea523"),
-    gallery: [
-      img("photo-1564507592333-c60657eea523"),
-      img("photo-1571896349842-33c89424de2d"),
-      img("photo-1477959858617-67f85cf4f1df"),
-    ],
+    imageUrl: asset("masjidagung1.webp"),
+    gallery: [asset("masjidagung1.webp"), asset("masjidagung2.webp"), asset("masjidagung3.webp")],
     price: 200000,
     durationHours: 3,
     location: "Batam Centre",
@@ -422,14 +389,10 @@ const SEED_TOURS = [
     slug: "masjid-raja-sultan",
     tagline: "A regal mosque and a lesson in Batam's royal heritage.",
     description:
-      "Masjid Raja Sultan honors Batam's sultanate heritage with stately architecture and a serene courtyard. A quiet, thoughtful stop for travelers interested in the island's culture.",
+      "Masjid megah dengan arsitektur yang mengesankan dan menjadi salah satu destinasi wisata religi yang menarik untuk dikunjungi di Batam.",
     category: "City & Culture",
-    imageUrl: img("photo-1564507592333-c60657eea523"),
-    gallery: [
-      img("photo-1564507592333-c60657eea523"),
-      img("photo-1571896349842-33c89424de2d"),
-      img("photo-1480714378408-67cf0d13bc1b"),
-    ],
+    imageUrl: asset("masjidraya1.webp"),
+    gallery: [asset("masjidraya1.webp"), asset("masjidraya2.webp"), asset("masjidraya3.webp")],
     price: 200000,
     durationHours: 3,
     location: "Batam Centre",
@@ -455,14 +418,10 @@ const SEED_TOURS = [
     slug: "masjid-tancak",
     tagline: "A waterside mosque rising from the ponds of Tembesi — one of Batam's most photographed sights.",
     description:
-      "Masjid Tancak is Batam's beloved 'floating' mosque, built over the fish ponds of Tembesi. Visit between prayer times to admire its graceful dome and minaret mirrored in the water, then linger for sunset photos across the pond.",
+      "Memiliki desain arsitektur yang khas dan unik, menjadikannya salah satu ikon wisata religi sekaligus spot foto menarik di Batam.",
     category: "City & Culture",
-    imageUrl: img("photo-1571896349842-33c89424de2d"),
-    gallery: [
-      img("photo-1571896349842-33c89424de2d"),
-      img("photo-1564507592333-c60657eea523"),
-      img("photo-1519452575417-564c1401ecc0"),
-    ],
+    imageUrl: asset("tanjak1.webp"),
+    gallery: [asset("tanjak1.webp"), asset("tanjak2.webp"), asset("tanjak3.webp")],
     price: 200000,
     durationHours: 3,
     location: "Tembesi",
@@ -489,14 +448,10 @@ const SEED_TOURS = [
     slug: "patung-seribu",
     tagline: "A thousand serene statues at Batam's grandest temple complex.",
     description:
-      "Walk the terraces of the Maha Vihara Duta Maitreya temple complex, where a thousand Buddha statues sit in quiet rows. A peaceful, photogenic visit to Southeast Asia's largest Buddhist temple.",
+      "Destinasi dengan suasana yang unik dan berbeda. Deretan patung serta lingkungan sekitarnya menawarkan pengalaman wisata yang menarik bagi para pengunjung.",
     category: "City & Culture",
-    imageUrl: img("photo-1564507592333-c60657eea523"),
-    gallery: [
-      img("photo-1564507592333-c60657eea523"),
-      img("photo-1566837945700-30057527ade0"),
-      img("photo-1477959858617-67f85cf4f1df"),
-    ],
+    imageUrl: asset("patun1.webp"),
+    gallery: [asset("patun1.webp"), asset("patun2.webp"), asset("patun3.webp")],
     price: 250000,
     durationHours: 4,
     location: "Bengkong",
@@ -523,14 +478,10 @@ const SEED_TOURS = [
     slug: "pulau-penyengat",
     tagline: "A historic island of yellow mosques and royal tombs, across the strait.",
     description:
-      "Ferry to Pulau Penyengat, the tiny island that was the heart of the Riau-Lingga sultanate. Climb to the iconic yellow mosque, visit the royal tombs, and soak up 300 years of history in one morning.",
+      "Jelajahi pulau yang kaya akan sejarah dan budaya Melayu. Temukan berbagai peninggalan bersejarah sekaligus menikmati suasana khas Pulau Penyengat.",
     category: "Island & Beach",
-    imageUrl: img("photo-1530521954074-e64f6810b32d"),
-    gallery: [
-      img("photo-1530521954074-e64f6810b32d"),
-      img("photo-1519452575417-564c1401ecc0"),
-      img("photo-1473116763249-2faaef81ccda"),
-    ],
+    imageUrl: asset("pulau1.webp"),
+    gallery: [asset("pulau1.webp"), asset("pulau2.webp"), asset("pulau3.webp")],
     price: 750000,
     durationHours: 8,
     location: "Tanjungpinang, Bintan",
@@ -557,14 +508,10 @@ const SEED_TOURS = [
     slug: "puncak-beliung",
     tagline: "A gentle climb to Batam's best hilltop panorama.",
     description:
-      "Hike up Puncak Beliung through cool jungle shade and emerge above the canopy for a 360° view of Batam's coast and islands. A short, rewarding trek for every fitness level.",
+      "Nikmati panorama Batam dari ketinggian. Suasana yang sejuk dan pemandangan alam menjadikannya pilihan menarik untuk bersantai dan menikmati matahari terbenam.",
     category: "Adventure",
-    imageUrl: img("photo-1500375592092-40eb2168fd21"),
-    gallery: [
-      img("photo-1500375592092-40eb2168fd21"),
-      img("photo-1476673160081-cf065607f449"),
-      img("photo-1480714378408-67cf0d13bc1b"),
-    ],
+    imageUrl: asset("puncak1.webp"),
+    gallery: [asset("puncak1.webp"), asset("puncak2.webp"), asset("puncak3.webp")],
     price: 300000,
     durationHours: 5,
     location: "Beliung",
@@ -591,14 +538,10 @@ const SEED_TOURS = [
     slug: "saung-budaya",
     tagline: "Malay music, dance and craft — Batam's culture under one roof.",
     description:
-      "Saung Budaya showcases the best of Malay culture: live music and dance performances, traditional houses and crafts, and a chance to try your hand at a local instrument.",
+      "Tempat yang cocok untuk mengenal lebih dekat budaya dan tradisi lokal. Nikmati pengalaman wisata yang berbeda sambil mengenal kekayaan budaya Kepulauan Riau.",
     category: "City & Culture",
-    imageUrl: img("photo-1466692476868-aef1dfb1e735"),
-    gallery: [
-      img("photo-1466692476868-aef1dfb1e735"),
-      img("photo-1500937386664-56d1dfef3854"),
-      img("photo-1519677100203-a0e668c92439"),
-    ],
+    imageUrl: asset("saung1.webp"),
+    gallery: [asset("saung1.webp"), asset("saung2.webp"), asset("saung3.webp")],
     price: 250000,
     durationHours: 4,
     location: "Batam",
@@ -625,14 +568,10 @@ const SEED_TOURS = [
     slug: "telaga-biru-dan-gurun-pasir",
     tagline: "A surreal blue lake ringed by white sand dunes.",
     description:
-      "Once a sand quarry, now one of Batam's most surreal sights: a vivid blue lake cupped by white dunes that feels more like a desert than an island. A photographer's dream, especially at golden hour.",
+      "Saksikan perpaduan pemandangan yang unik antara telaga dengan warna air yang menarik dan hamparan pasir yang memberikan nuansa seperti gurun.",
     category: "Adventure",
-    imageUrl: img("photo-1559827260-dc66d52bef19"),
-    gallery: [
-      img("photo-1559827260-dc66d52bef19"),
-      img("photo-1500375592092-40eb2168fd21"),
-      img("photo-1519452575417-564c1401ecc0"),
-    ],
+    imageUrl: asset("telaga1.webp"),
+    gallery: [asset("telaga1.webp"), asset("telaga2.webp"), asset("telaga3.webp")],
     price: 275000,
     durationHours: 4,
     location: "Sekupang",
@@ -659,14 +598,10 @@ const SEED_TOURS = [
     slug: "treasure-bay",
     tagline: "Asia's biggest crystal lagoon, with slides, kayaks and poolside lounging.",
     description:
-      "Treasure Bay Bintan is a giant man-made crystal lagoon: swim in the impossibly clear water, ride the inflatable obstacle course, paddle a kayak, or simply float with a drink in hand.",
+      "Destinasi wisata tropis dengan kawasan luas dan berbagai aktivitas rekreasi. Cocok untuk menikmati liburan bersama keluarga, pasangan, maupun teman.",
     category: "Island & Beach",
-    imageUrl: img("photo-1540541338287-41700207dee6"),
-    gallery: [
-      img("photo-1540541338287-41700207dee6"),
-      img("photo-1507525428034-b723cf961d3e"),
-      img("photo-1519046904884-53103b34b206"),
-    ],
+    imageUrl: asset("trea1.webp"),
+    gallery: [asset("trea1.webp"), asset("trea2.webp"), asset("trea3.webp")],
     price: 800000,
     durationHours: 8,
     location: "Lagoi, Bintan",
@@ -693,14 +628,10 @@ const SEED_TOURS = [
     slug: "welcome-to-batam",
     tagline: "The perfect first day — city icons, culture and sea views in one easy loop.",
     description:
-      "A guided introduction to Batam: the landmark Gedung Gonggong, a temple visit, a mosque stop, and a sunset viewpoint by the strait. The fastest way to fall in love with the island.",
+      "Salah satu ikon kota Batam yang wajib dikunjungi. Abadikan momen dengan latar tulisan Welcome to Batam dan nikmati suasana kawasan sekitarnya.",
     category: "City & Culture",
-    imageUrl: img("photo-1477959858617-67f85cf4f1df"),
-    gallery: [
-      img("photo-1477959858617-67f85cf4f1df"),
-      img("photo-1480714378408-67cf0d13bc1b"),
-      img("photo-1519677100203-a0e668c92439"),
-    ],
+    imageUrl: asset("wtb1.webp"),
+    gallery: [asset("wtb1.webp"), asset("wtb2.webp"), asset("wtb3.webp")],
     price: 350000,
     durationHours: 6,
     location: "Batam Centre",
