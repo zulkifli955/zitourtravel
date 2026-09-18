@@ -18,7 +18,6 @@ import {
   Clock,
   Compass,
   Headset,
-  Hotel,
   MapPin,
   MessageCircle,
   Phone,
@@ -177,7 +176,6 @@ const TRAVEL_GUIDE = [
 /** What every multi-day package includes. */
 const PACKAGE_INCLUDES = [
   { icon: CarFront, label: "Car Transport" },
-  { icon: Hotel, label: "Hotel" },
   { icon: UserRound, label: "Driver" },
 ];
 
