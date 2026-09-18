@@ -78,6 +78,12 @@ const EXPECTED_TOUR_GALLERIES: Record<string, string> = {
 
 const DRIVER_IMAGE = "/assets/10.webp";
 
+/** Official tourism badges shown underneath the catalog. */
+const BATAM_BADGE_IMAGES = [
+  { src: "/assets/wonderfull.png", alt: "Wonderful Indonesia" },
+  { src: "/assets/visit_batam.jpg", alt: "Visit Batam" },
+];
+
 /** Gallery photos uploaded by the owner (2–10; 11 not uploaded yet). */
 const GALLERY_PHOTOS = [
   "/assets/2.jpeg",
@@ -650,6 +656,23 @@ function BrowseTours({ tours }: { tours?: Doc<"tours">[] }) {
             </div>
           )}
         </div>
+
+        <Reveal delay={0.1}>
+          <div className="mt-14 flex flex-col items-center justify-center gap-8 sm:flex-row sm:gap-14">
+            <img
+              src={BATAM_BADGE_IMAGES[0].src}
+              alt={BATAM_BADGE_IMAGES[0].alt}
+              loading="lazy"
+              className="h-16 w-auto object-contain sm:h-20"
+            />
+            <img
+              src={BATAM_BADGE_IMAGES[1].src}
+              alt={BATAM_BADGE_IMAGES[1].alt}
+              loading="lazy"
+              className="h-16 w-auto object-contain sm:h-20"
+            />
+          </div>
+        </Reveal>
       </div>
     </section>
   );
