@@ -18,9 +18,12 @@ import {
   Clock,
   Compass,
   Headset,
+  Hotel,
   MapPin,
   MessageCircle,
   Phone,
+  Ship,
+  UserRound,
   Users,
 } from "lucide-react";
 import { useEffect } from "react";
@@ -125,6 +128,93 @@ const STEPS = [
     icon: CarFront,
     title: "Explore Batam",
     copy: "Your guide and private car pick you up at your hotel, exactly on time.",
+  },
+];
+
+/** What every multi-day package includes. */
+const PACKAGE_INCLUDES = [
+  { icon: CarFront, label: "Car Transport" },
+  { icon: Ship, label: "Ticket Ferry" },
+  { icon: Hotel, label: "Hotel" },
+  { icon: UserRound, label: "Driver" },
+];
+
+/**
+ * Multi-day Batam and Batam–Bintan packages. Every rate is per person and
+ * each card carries its own WhatsApp booking message.
+ */
+const PACKAGES = [
+  {
+    title: "2 Day 1 Night Trip Batam",
+    photos: ["/assets/batam_2d1n.webp"],
+    rates: [
+      { price: "400 RM / 132 SGD", min: "Min 4 Pax" },
+      { price: "398 RM / 134 SGD", min: "Min 8 Pax" },
+      { price: "370 RM / 125 SGD", min: "Min 12 Pax" },
+    ],
+    button: "Booking 2D1N",
+    message:
+      "Halo, Zi Tour Travel Batam. Booking 2 Day 1 Night Trip BATAM.",
+  },
+  {
+    title: "3 Day 2 Night Trip Batam",
+    photos: ["/assets/batam_3d2n.webp"],
+    rates: [
+      { price: "540 RM / 175 SGD", min: "Min 4 Pax" },
+      { price: "530 RM / 175 SGD", min: "Min 8 Pax" },
+      { price: "499 RM / 160 SGD", min: "Min 12 Pax" },
+    ],
+    button: "Booking 3D2N",
+    message:
+      "Halo, Zi Tour Travel Batam. Booking 3 Day 2 Night Trip BATAM.",
+  },
+  {
+    title: "4 Day 3 Night Trip Batam",
+    photos: ["/assets/batam_4d3n.webp"],
+    rates: [
+      { price: "675 RM / 219 SGD", min: "Min 4 Pax" },
+      { price: "665 RM / 215 SGD", min: "Min 8 Pax" },
+      { price: "700 RM / 200 SGD", min: "Min 12 Pax" },
+    ],
+    button: "Booking 4D3N",
+    message:
+      "Halo, Zi Tour Travel Batam. Booking 4 Day 3 Night Trip BATAM.",
+  },
+  {
+    title: "2 Day 1 Night Trip Batam — Bintan",
+    photos: ["/assets/batam-bintan_2d-1n.webp"],
+    rates: [
+      { price: "450 RM / 150 SGD", min: "Min 4 Pax" },
+      { price: "460 RM / 155 SGD", min: "Min 8 Pax" },
+      { price: "425 RM / 140 SGD", min: "Min 12 Pax" },
+    ],
+    button: "Booking 2D1N",
+    message:
+      "Halo, Zi Tour Travel Batam. Booking 2 Day 1 Night Trip BATAM - BINTAN.",
+  },
+  {
+    title: "3 Day 2 Night Trip Batam — Bintan",
+    photos: ["/assets/batam-bintan_3d2n.webp"],
+    rates: [
+      { price: "609 RM / 200 SGD", min: "Min 4 Pax" },
+      { price: "599 RM / 197 SGD", min: "Min 8 Pax" },
+      { price: "549 RM / 180 SGD", min: "Min 12 Pax" },
+    ],
+    button: "Booking 3D2N",
+    message:
+      "Halo, Zi Tour Travel Batam. Booking 3 Day 2 Night Trip BATAM - BINTAN.",
+  },
+  {
+    title: "4 Day 3 Night Trip Batam — Bintan",
+    photos: ["/assets/batam-bintan_4d3n.webp"],
+    rates: [
+      { price: "745 RM / 245 SGD", min: "Min 4 Pax" },
+      { price: "729 RM / 235 SGD", min: "Min 8 Pax" },
+      { price: "665 RM / 215 SGD", min: "Min 12 Pax" },
+    ],
+    button: "Booking 4D3N",
+    message:
+      "Halo, Zi Tour Travel Batam. Booking 4 Day 3 Night Trip BATAM - BINTAN.",
   },
 ];
 
@@ -260,6 +350,84 @@ function Hero() {
               </div>
             </Reveal>
           </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/* Packages                                                            */
+/* ------------------------------------------------------------------ */
+
+function Packages() {
+  return (
+    <section id="packages" className="scroll-mt-24 bg-muted/50 py-20 lg:py-24">
+      <div className="mx-auto w-full max-w-6xl px-4 sm:px-6">
+        <Reveal>
+          <SectionHeader
+            eyebrow="package"
+            title="Package Travel Batam with Itinerary"
+            copy="Explore Batam with us — every package is a full trip, not just a day out. All of them include:"
+            center
+          />
+        </Reveal>
+
+        <Reveal delay={0.05}>
+          <ul className="mx-auto mt-8 flex max-w-2xl flex-wrap items-center justify-center gap-2.5">
+            {PACKAGE_INCLUDES.map((item) => (
+              <li
+                key={item.label}
+                className="flex items-center gap-2 rounded-full border border-border/70 bg-card px-4 py-2 text-sm font-medium shadow-sm"
+              >
+                <item.icon className="size-4 shrink-0 text-primary" />
+                {item.label}
+              </li>
+            ))}
+          </ul>
+        </Reveal>
+
+        <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {PACKAGES.map((pkg, i) => (
+            <Reveal key={pkg.title} delay={(i % 3) * 0.06} className="h-full">
+              <article className="flex h-full flex-col overflow-hidden rounded-2xl border border-border/70 bg-card shadow-sm transition-shadow hover:shadow-md">
+                <PhotoCarousel
+                  photos={pkg.photos}
+                  alt={pkg.title}
+                  itemClassName="aspect-[16/10]"
+                />
+                <div className="flex flex-1 flex-col gap-5 px-6 pb-6 pt-6 text-center">
+                  <h3 className="text-balance text-lg font-bold tracking-tight">
+                    {pkg.title}
+                  </h3>
+                  <ul className="space-y-2">
+                    {pkg.rates.map((rate) => (
+                      <li
+                        key={rate.price}
+                        className="flex flex-wrap items-center justify-center gap-x-2 rounded-xl border bg-muted/50 px-3 py-2"
+                      >
+                        <span className="text-sm font-bold tracking-tight">
+                          {rate.price}
+                        </span>
+                        <span className="text-xs font-bold text-red-600">
+                          {rate.min}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                  <Button asChild className="mt-auto w-full rounded-full">
+                    <a
+                      href={waLink(undefined, pkg.message)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <MessageCircle /> {pkg.button}
+                    </a>
+                  </Button>
+                </div>
+              </article>
+            </Reveal>
+          ))}
         </div>
       </div>
     </section>
@@ -743,6 +911,7 @@ export default function Landing() {
       <SiteNav />
       <main>
         <Hero />
+        <Packages />
         <DriverSection />
         <Fleet />
         <Gallery />
