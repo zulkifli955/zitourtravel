@@ -22,7 +22,6 @@ import {
   MapPin,
   MessageCircle,
   Phone,
-  Ship,
   UserRound,
   Users,
 } from "lucide-react";
@@ -178,7 +177,6 @@ const TRAVEL_GUIDE = [
 /** What every multi-day package includes. */
 const PACKAGE_INCLUDES = [
   { icon: CarFront, label: "Car Transport" },
-  { icon: Ship, label: "Ticket Ferry" },
   { icon: Hotel, label: "Hotel" },
   { icon: UserRound, label: "Driver" },
 ];
