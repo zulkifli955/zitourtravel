@@ -23,6 +23,7 @@ import {
   MessageCircle,
   Phone,
   Ship,
+  Sun,
   UserRound,
   Users,
 } from "lucide-react";
@@ -128,6 +129,40 @@ const STEPS = [
     icon: CarFront,
     title: "Explore Batam",
     copy: "Your guide and private car pick you up at your hotel, exactly on time.",
+  },
+];
+
+/** Travel guide timeline shown beneath the driver profile. */
+const TRAVEL_GUIDE = [
+  {
+    n: "01",
+    title: "Location",
+    copy: "Batam sits close to Singapore and Malaysia, so it is easily accessible from both countries.",
+  },
+  {
+    n: "02",
+    title: "Attractions",
+    copy: "Batam offers a wide variety of tourist attractions, including beautiful beaches, golf courses, spas and shopping centers.",
+  },
+  {
+    n: "03",
+    title: "Access",
+    copy: "Reach Batam by ferry from Singapore and Malaysia, or by flying into Hang Nadim International Airport.",
+  },
+  {
+    n: "04",
+    title: "Activities",
+    copy: "Besides relaxing on the beach, you can play golf, enjoy a spa treatment, explore the mangrove forests or go shopping.",
+  },
+  {
+    n: "05",
+    title: "Culinary",
+    copy: "Batam is famous for its fresh seafood, along with local delicacies such as mie lendir and otak-otak.",
+  },
+  {
+    n: "06",
+    title: "Accommodation",
+    copy: "Batam offers a wide selection of places to stay, from luxury hotels to affordable guesthouses.",
   },
 ];
 
@@ -494,6 +529,57 @@ function DriverSection() {
             </div>
           </div>
         </Reveal>
+
+        {/* Vertical timeline: why travel to Batam */}
+        <div className="mt-16 sm:mt-20">
+          <Reveal>
+            <SectionHeader
+              eyebrow="travel guide"
+              title="Why you should travel to Batam"
+            />
+          </Reveal>
+
+          <Reveal delay={0.05}>
+            <div className="mt-6 flex items-start gap-3 rounded-2xl border border-primary/25 bg-primary/5 p-5">
+              <Sun className="mt-0.5 size-5 shrink-0 text-primary" />
+              <p className="text-sm leading-6 text-muted-foreground">
+                <span className="font-semibold text-foreground">Tips: </span>
+                The best time to visit Batam is between April and November.
+                Don&apos;t forget to bring sunscreen, a hat and sunglasses to
+                protect yourself from the sun.
+              </p>
+            </div>
+          </Reveal>
+
+          <ol className="mt-10 max-w-2xl">
+            {TRAVEL_GUIDE.map((item, i) => (
+              <li key={item.n} className="flex gap-5">
+                <div className="flex flex-col items-center">
+                  <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-primary font-mono text-xs font-bold text-primary-foreground shadow-sm">
+                    {item.n}
+                  </span>
+                  {i < TRAVEL_GUIDE.length - 1 && (
+                    <span className="mt-2 w-px flex-1 rounded-full bg-border" />
+                  )}
+                </div>
+                <Reveal
+                  delay={Math.min(i, 4) * 0.05}
+                  className={cn(
+                    "min-w-0 flex-1",
+                    i < TRAVEL_GUIDE.length - 1 && "pb-8",
+                  )}
+                >
+                  <h3 className="text-base font-semibold tracking-tight">
+                    {item.title}
+                  </h3>
+                  <p className="mt-2 text-sm leading-6 text-muted-foreground">
+                    {item.copy}
+                  </p>
+                </Reveal>
+              </li>
+            ))}
+          </ol>
+        </div>
       </div>
     </section>
   );
