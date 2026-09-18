@@ -23,7 +23,6 @@ import {
   MessageCircle,
   Phone,
   Ship,
-  Sun,
   UserRound,
   Users,
 } from "lucide-react";
@@ -537,18 +536,6 @@ function DriverSection() {
               eyebrow="travel guide"
               title="Why you should travel to Batam"
             />
-          </Reveal>
-
-          <Reveal delay={0.05}>
-            <div className="mt-6 flex items-start gap-3 rounded-2xl border border-primary/25 bg-primary/5 p-5">
-              <Sun className="mt-0.5 size-5 shrink-0 text-primary" />
-              <p className="text-sm leading-6 text-muted-foreground">
-                <span className="font-semibold text-foreground">Tips: </span>
-                The best time to visit Batam is between April and November.
-                Don&apos;t forget to bring sunscreen, a hat and sunglasses to
-                protect yourself from the sun.
-              </p>
-            </div>
           </Reveal>
 
           <ol className="mt-10 max-w-2xl">
