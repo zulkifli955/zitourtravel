@@ -78,10 +78,14 @@ const EXPECTED_TOUR_GALLERIES: Record<string, string> = {
 
 const DRIVER_IMAGE = "/assets/10.webp";
 
-/** Official tourism badges shown underneath the catalog. */
-const BATAM_BADGE_IMAGES = [
+/**
+ * Official tourism badges shown underneath the catalog. `blend` knocks out a
+ * solid white background (JPEGs carry no alpha channel) so the badge sits on
+ * the page like the transparent PNG next to it.
+ */
+const BATAM_BADGE_IMAGES: { src: string; alt: string; blend?: boolean }[] = [
   { src: "/assets/wonderfull.png", alt: "Wonderful Indonesia" },
-  { src: "/assets/visit_batam.jpg", alt: "Visit Batam" },
+  { src: "/assets/visit_batam.jpg", alt: "Visit Batam", blend: true },
 ];
 
 /** Gallery photos uploaded by the owner (2–10; 11 not uploaded yet). */
@@ -659,18 +663,18 @@ function BrowseTours({ tours }: { tours?: Doc<"tours">[] }) {
 
         <Reveal delay={0.1}>
           <div className="mt-14 flex flex-col items-center justify-center gap-8 sm:flex-row sm:gap-14">
-            <img
-              src={BATAM_BADGE_IMAGES[0].src}
-              alt={BATAM_BADGE_IMAGES[0].alt}
-              loading="lazy"
-              className="h-16 w-auto object-contain sm:h-20"
-            />
-            <img
-              src={BATAM_BADGE_IMAGES[1].src}
-              alt={BATAM_BADGE_IMAGES[1].alt}
-              loading="lazy"
-              className="h-16 w-auto object-contain sm:h-20"
-            />
+            {BATAM_BADGE_IMAGES.map((badge) => (
+              <img
+                key={badge.src}
+                src={badge.src}
+                alt={badge.alt}
+                loading="lazy"
+                className={cn(
+                  "h-16 w-auto object-contain sm:h-20",
+                  badge.blend && "mix-blend-multiply",
+                )}
+              />
+            ))}
           </div>
         </Reveal>
       </div>
