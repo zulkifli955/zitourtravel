@@ -394,7 +394,8 @@ function Packages() {
                 <PhotoCarousel
                   photos={pkg.photos}
                   alt={pkg.title}
-                  itemClassName="aspect-[16/10]"
+                  itemClassName="aspect-[9/10]"
+                  imgClassName="object-contain"
                 />
                 <div className="flex flex-1 flex-col gap-5 px-6 pb-6 pt-6 text-center">
                   <h3 className="text-balance text-lg font-bold tracking-tight">
